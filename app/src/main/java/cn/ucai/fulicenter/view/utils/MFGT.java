@@ -11,7 +11,7 @@ import cn.ucai.fulicenter.R;
 
 public class MFGT {
     public static void startActivity(Activity context,Class<?> cla){
-        context.overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
         context.startActivity(new Intent(context,cla));
+        context.overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
     }
 }
