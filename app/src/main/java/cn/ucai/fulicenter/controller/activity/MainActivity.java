@@ -1,26 +1,42 @@
 package cn.ucai.fulicenter.controller.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.controller.fragment.BoutiqueFragment;
+import cn.ucai.fulicenter.controller.fragment.CartFragment;
+import cn.ucai.fulicenter.controller.fragment.CategoryFragment;
+import cn.ucai.fulicenter.controller.fragment.CenterFragment;
 import cn.ucai.fulicenter.controller.fragment.NewGoodsFragment;
 
 public class MainActivity extends AppCompatActivity {
-RadioButton [] radioButtons;
-    RadioButton mNewgoods,mBoutique,mCart,mCategory,mCenter;
-    int index,currentIndex;
+    RadioButton[] radioButtons;
+    RadioButton mNewgoods, mBoutique, mCart, mCategory, mCenter;
+    int index, currentIndex;
+    Fragment[] fragments;
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
+    MyViewAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         initVeiw();
     }
 
     private void initVeiw() {
         radioButtons = new RadioButton[5];
+        fragments = new Fragment[5];
         mNewgoods = (RadioButton) findViewById(R.id.Layout_NewGoods);
         mBoutique = (RadioButton) findViewById(R.id.Layout_Boutique);
         mCart = (RadioButton) findViewById(R.id.Layout_Cart);
@@ -29,14 +45,41 @@ RadioButton [] radioButtons;
         radioButtons[0] = mNewgoods;
         radioButtons[1] = mBoutique;
         radioButtons[2] = mCategory;
-        radioButtons[3]= mCart;
+        radioButtons[3] = mCart;
         radioButtons[4] = mCenter;
 
-        getSupportFragmentManager().beginTransaction().add(R.id.Layout_Container,new NewGoodsFragment()).commit();
+        fragments[0] = new NewGoodsFragment();
+        fragments[1] = new BoutiqueFragment();
+        fragments[2] = new CategoryFragment();
+        fragments[3] = new CartFragment();
+        fragments[4] = new CenterFragment();
+        adapter = new MyViewAdapter(getSupportFragmentManager(),fragments);
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (position==currentIndex){
+                    return;
+                }
+                radioButtons[currentIndex].setChecked(false);
+                radioButtons[position].setChecked(true);
+                currentIndex=position;
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
-    public void onCheckedChange(View view){
-        switch (view.getId()){
+    public void onCheckedChange(View view) {
+        switch (view.getId()) {
             case R.id.Layout_NewGoods:
                 index = 0;
                 break;
@@ -53,19 +96,38 @@ RadioButton [] radioButtons;
                 index = 4;
                 break;
         }
-            if (index!=currentIndex){
-                setStatus();
-            }
+        if (index != currentIndex) {
+            setStatus();
+            viewPager.setCurrentItem(index);
+        }
     }
 
     private void setStatus() {
-        for (int i = 0;i<radioButtons.length;i++){
-            if (index!=i){
+        for (int i = 0; i < radioButtons.length; i++) {
+            if (index != i) {
                 radioButtons[i].setChecked(false);
-            }else {
+            } else {
                 radioButtons[i].setChecked(true);
             }
         }
-        currentIndex=index;
+        currentIndex = index;
+    }
+    class MyViewAdapter extends FragmentPagerAdapter{
+        Fragment[] fragments;
+
+        public MyViewAdapter(FragmentManager fm,Fragment[] fragments) {
+            super(fm);
+            this.fragments = fragments;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments[position];
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.length;
+        }
     }
 }

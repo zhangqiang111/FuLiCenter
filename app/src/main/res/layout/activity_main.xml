@@ -51,11 +51,10 @@
             android:drawableTop="@drawable/selector_menu_item_personal_center"
             />
     </LinearLayout>
-    <FrameLayout
-        android:id="@+id/Layout_Container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/ll">
-
-    </FrameLayout>
+<android.support.v4.view.ViewPager
+    android:id="@+id/viewPager"
+    android:layout_width="wrap_content"
+    android:layout_above="@id/ll"
+    android:layout_height="match_parent">
+</android.support.v4.view.ViewPager>
 </RelativeLayout>

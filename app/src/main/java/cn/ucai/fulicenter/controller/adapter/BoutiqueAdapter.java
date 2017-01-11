@@ -14,7 +14,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.model.bean.NewGoodsBean;
+import cn.ucai.fulicenter.application.I;
+import cn.ucai.fulicenter.model.bean.BoutiqueBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.view.FooterViewHolder;
 
@@ -22,11 +23,9 @@ import cn.ucai.fulicenter.view.FooterViewHolder;
  * Created by Administrator on 2017/1/11 0011.
  */
 
-public class GoodsAdapter extends RecyclerView.Adapter {
-    final int TYPE_FOOTER = 0;
-    final int TYPE_CONTACT = 1;
+public class BoutiqueAdapter extends RecyclerView.Adapter {
     Context context;
-    List<NewGoodsBean> mGoodsList;
+    List<BoutiqueBean> mGoodsList;
     String footer;
     boolean isMore;
     boolean isDragging;
@@ -58,7 +57,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public GoodsAdapter(Context context, List<NewGoodsBean> mGoods) {
+    public BoutiqueAdapter(Context context, List<BoutiqueBean> mGoods) {
         this.context = context;
         mGoodsList = new ArrayList<>();
         this.mGoodsList.addAll(mGoods);
@@ -67,38 +66,36 @@ public class GoodsAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layout = null;
-        if (viewType == TYPE_FOOTER) {
+        if (viewType == I.TYPE_FOOTER) {
             layout = LayoutInflater.from(context).inflate(R.layout.footer_item, null);
             return new FooterViewHolder(layout);
         } else {
-            layout = LayoutInflater.from(context).inflate(R.layout.goods_adapter, null);
-            return new GoodsViewHolder(layout);
+            layout = LayoutInflater.from(context).inflate(R.layout.boutique_adapter, null);
+            return new BoutiqueViewHolder(layout);
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position)==TYPE_FOOTER){
+        if (getItemViewType(position)==I.TYPE_FOOTER){
             FooterViewHolder fv = (FooterViewHolder) holder;
             fv.tvFooter.setText(getFooter());
             return;
         }
-        GoodsViewHolder gvh = null;
-        if (holder != null) {
-            gvh = (GoodsViewHolder) holder;
-        }
-        NewGoodsBean goodsDetailsBean = mGoodsList.get(position);
-        ImageLoader.downloadImg(context, gvh.ivGoodsThumb, goodsDetailsBean.getGoodsThumb());
-        gvh.tvGoodName.setText(goodsDetailsBean.getGoodsName());
-        gvh.tvGoodsPrice.setText(goodsDetailsBean.getCurrencyPrice());
+        BoutiqueViewHolder bvh = (BoutiqueViewHolder) holder;
+        BoutiqueBean boutiqueBean = mGoodsList.get(position);
+        ImageLoader.downloadImg(context,bvh.ivBoutiqueGoodsThumb,boutiqueBean.getImageurl());
+        bvh.tvTitle.setText(boutiqueBean.getTitle());
+        bvh.tvDescription.setText(boutiqueBean.getDescription());
+        bvh.tvName.setText(boutiqueBean.getName());
     }
 
     @Override
     public int getItemViewType(int position) {
         if (position == getItemCount() - 1) {
-            return TYPE_FOOTER;
+            return I.TYPE_FOOTER;
         }
-        return TYPE_CONTACT;
+        return I.TYPE_ITEM;
     }
 
     @Override
@@ -106,44 +103,31 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         return mGoodsList.size()+1;
     }
 
-    public void initData(ArrayList<NewGoodsBean> mList) {
+    public void initData(ArrayList<BoutiqueBean> mList) {
         if (mList != null) {
             this.mGoodsList.clear();
         }
         addList(mList);
     }
 
-    public void addList(ArrayList<NewGoodsBean> mList) {
+    public void addList(ArrayList<BoutiqueBean> mList) {
         this.mGoodsList.addAll(mList);
         notifyDataSetChanged();
     }
 
-    static class GoodsViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivGoodsThumb)
-        ImageView ivGoodsThumb;
-        @BindView(R.id.tvGoodName)
-        TextView tvGoodName;
-        @BindView(R.id.tvGoodsPrice)
-        TextView tvGoodsPrice;
+    static class BoutiqueViewHolder extends RecyclerView.ViewHolder{
+        @BindView(R.id.iv_boutique_goodsThumb)
+        ImageView ivBoutiqueGoodsThumb;
+        @BindView(R.id.tvTitle)
+        TextView tvTitle;
+        @BindView(R.id.tvName)
+        TextView tvName;
+        @BindView(R.id.tvDescription)
+        TextView tvDescription;
 
-        GoodsViewHolder(View view) {
+        BoutiqueViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
     }
-
-
-    /*class GoodsViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivGoodsThumb)
-        ImageView ivGoods;
-        @BindView(R.id.tvGoodName)
-        TextView tvGoodName;
-        @BindView(R.id.tvGoodsPrice)
-        TextView tvGoodsPrice;
-
-        public GoodsViewHolder(View itemView) {
-            super(itemView);
-        }
-    }*/
-
 }

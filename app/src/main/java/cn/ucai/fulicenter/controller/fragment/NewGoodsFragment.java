@@ -27,6 +27,7 @@ import cn.ucai.fulicenter.model.net.IModelNewGoods;
 import cn.ucai.fulicenter.model.net.ModelNewGoods;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.ConvertUtils;
+import cn.ucai.fulicenter.model.utils.SpaceItemDecoration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -95,6 +96,7 @@ public class NewGoodsFragment extends Fragment {
         adapter = new GoodsAdapter(getContext(), mList);
         manager = new GridLayoutManager(context, I.COLUM_NUM);
         recyNewGoods.setLayoutManager(manager);
+        recyNewGoods.addItemDecoration(new SpaceItemDecoration(30));
         recyNewGoods.setHasFixedSize(true);
         recyNewGoods.setAdapter(adapter);
     }
@@ -127,7 +129,6 @@ public class NewGoodsFragment extends Fragment {
 
             @Override
             public void onError(String error) {
-
             }
         });
     }
