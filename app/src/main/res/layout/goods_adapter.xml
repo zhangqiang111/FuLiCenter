@@ -6,8 +6,9 @@
 <ImageView
     android:id="@+id/ivGoodsThumb"
     android:src="@drawable/nopic"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+    android:layout_width="match_parent"
+    android:scaleType="fitXY"
+    android:layout_height="250dp" />
     <TextView
         android:id="@+id/tvGoodName"
         android:layout_width="wrap_content"
