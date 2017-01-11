@@ -32,8 +32,9 @@ import cn.ucai.fulicenter.model.utils.ConvertUtils;
  * A simple {@link Fragment} subclass.
  */
 public class NewGoodsFragment extends Fragment {
-
-
+    final int ACTION_DOWNLOAD = 0;
+    final int ACTION_PULL_UP = 1;
+    final int ACTION_PULL_DOWN = 2;
     @BindView(R.id.recy_new_goods)
     RecyclerView recyNewGoods;
     @BindView(R.id.srl)
@@ -46,6 +47,7 @@ public class NewGoodsFragment extends Fragment {
     IModelNewGoods model;
     ArrayList<NewGoodsBean> mList;
     MainActivity context;
+
     public NewGoodsFragment() {
         // Required empty public constructor
     }
@@ -57,9 +59,35 @@ public class NewGoodsFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_new_goods, container, false);
         ButterKnife.bind(this, layout);
         context = (MainActivity) getContext();
+        model = new ModelNewGoods();
         initView();
-        initData();
+        getData(pageId, ACTION_DOWNLOAD);
+        setListener();
         return layout;
+    }
+
+    private void setListener() {
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                srl.setRefreshing(true);
+                tvRefresh.setVisibility(View.VISIBLE);
+                pageId = 1;
+                getData(pageId, ACTION_PULL_DOWN);
+            }
+        });
+        recyNewGoods.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                adapter.setDragging(newState == RecyclerView.SCROLL_STATE_DRAGGING);
+                int lastposition = manager.findLastVisibleItemPosition();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && adapter.isMore() && lastposition == adapter.getItemCount() - 1) {
+                    pageId++;
+                    getData(pageId, ACTION_PULL_UP);
+                }
+            }
+        });
     }
 
     private void initView() {
@@ -71,14 +99,30 @@ public class NewGoodsFragment extends Fragment {
         recyNewGoods.setAdapter(adapter);
     }
 
-    private void initData() {
-        model = new ModelNewGoods();
+    private void getData(int pageId, final int action) {
         model.downloadNewGoods(context, I.CAT_ID, pageId, new OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
+                adapter.setMore(result != null && result.length > 0);
+                if (!adapter.isMore()) {
+                    adapter.setFooter("没有更多的数据");
+                    return;
+                }
+                adapter.setFooter("加载更多的数据");
                 ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
-                Log.e("main",list.toString());
-                adapter.initData(list);
+                switch (action) {
+                    case ACTION_DOWNLOAD:
+                        adapter.initData(list);
+                        break;
+                    case ACTION_PULL_DOWN:
+                        srl.setRefreshing(false);
+                        tvRefresh.setVisibility(View.GONE);
+                        adapter.initData(list);
+                        break;
+                    case ACTION_PULL_UP:
+                        adapter.addList(list);
+                        break;
+                }
             }
 
             @Override
