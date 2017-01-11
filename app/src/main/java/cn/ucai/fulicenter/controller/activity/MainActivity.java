@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.controller.fragment.NewGoodsFragment;
 
 public class MainActivity extends AppCompatActivity {
 RadioButton [] radioButtons;
@@ -30,6 +31,8 @@ RadioButton [] radioButtons;
         radioButtons[2] = mCategory;
         radioButtons[3]= mCart;
         radioButtons[4] = mCenter;
+
+        getSupportFragmentManager().beginTransaction().add(R.id.Layout_Container,new NewGoodsFragment()).commit();
     }
 
     public void onCheckedChange(View view){
