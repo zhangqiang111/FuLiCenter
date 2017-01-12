@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_goods_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/iclude"
+        layout="@layout/goods_top" />
+
+    <TextView
+        android:id="@+id/tvEnglishName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iclude"
+        android:layout_marginTop="20dp"
+        android:text="Englishmae"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvChineseName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvEnglishName"
+        android:layout_marginTop="20dp"
+        android:text="ChineseName"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tvChineseName"
+        android:layout_marginLeft="50dp"
+        android:layout_toRightOf="@id/tvChineseName"
+        android:text="500"
+        android:textSize="16sp" />
+    <RelativeLayout
+        android:id="@+id/RLImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="40dp"
+        android:layout_below="@id/tvPrice">
+
+        <cn.ucai.fulicenter.view.SlideAutoLoopView
+            android:id="@+id/salv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/good_detail_bg_white">
+        </cn.ucai.fulicenter.view.SlideAutoLoopView>
+        <cn.ucai.fulicenter.view.FlowIndicator
+            android:id="@+id/indictor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:count = "4"
+            app:focus="0"
+            app:focus_color="@color/good_detaul_flow_indicator_focus"
+            app:normal_color="#a1d1d1d1"
+            app:r="5dp"
+            app:space="3dp"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_below="@id/RLImage"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content">
+
+    </WebView>
+</RelativeLayout>

@@ -20,6 +20,7 @@ import cn.ucai.fulicenter.controller.activity.BoutiqueChildActivity;
 import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.model.utils.L;
+import cn.ucai.fulicenter.model.utils.MFGT;
 import cn.ucai.fulicenter.view.FooterViewHolder;
 
 /**
@@ -101,12 +102,18 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         if (holder != null) {
             gvh = (GoodsViewHolder) holder;
         }
-        NewGoodsBean goodsDetailsBean = mGoodsList.get(position);
+        final NewGoodsBean goodsDetailsBean = mGoodsList.get(position);
         ImageLoader.downloadImg(context, gvh.ivGoodsThumb, goodsDetailsBean.getGoodsThumb());
         gvh.tvGoodName.setText(goodsDetailsBean.getGoodsName());
         gvh.tvGoodsPrice.setText(goodsDetailsBean.getCurrencyPrice());
         gvh.itemView.setTag(R.id.tag_first,goodsDetailsBean.getCatId());
         gvh.itemView.setTag(R.id.tag_second,goodsDetailsBean.getGoodsName());
+        gvh.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MFGT.gotoGoodsDetails(context,goodsDetailsBean.getGoodsId());
+            }
+        });
 
     }
 
@@ -149,19 +156,5 @@ public class GoodsAdapter extends RecyclerView.Adapter {
             ButterKnife.bind(this, view);
         }
     }
-
-
-    /*class GoodsViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivGoodsThumb)
-        ImageView ivGoods;
-        @BindView(R.id.tvGoodName)
-        TextView tvGoodName;
-        @BindView(R.id.tvGoodsPrice)
-        TextView tvGoodsPrice;
-
-        public GoodsViewHolder(View itemView) {
-            super(itemView);
-        }
-    }*/
 
 }

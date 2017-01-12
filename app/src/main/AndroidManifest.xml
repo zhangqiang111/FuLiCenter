@@ -20,8 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.activity.MainActivity"></activity>
-        <activity android:name=".controller.activity.BoutiqueChildActivity"></activity>
+        <activity android:name=".controller.activity.MainActivity" />
+        <activity android:name=".controller.activity.BoutiqueChildActivity" />
+        <activity android:name=".controller.activity.GoodsDetailsActivity"></activity>
     </application>
 
 </manifest>
