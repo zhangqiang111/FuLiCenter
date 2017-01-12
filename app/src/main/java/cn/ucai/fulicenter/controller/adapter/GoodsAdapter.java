@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.controller.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.I;
+import cn.ucai.fulicenter.controller.activity.BoutiqueChildActivity;
 import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
+import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.view.FooterViewHolder;
 
 /**
@@ -23,13 +27,12 @@ import cn.ucai.fulicenter.view.FooterViewHolder;
  */
 
 public class GoodsAdapter extends RecyclerView.Adapter {
-    final int TYPE_FOOTER = 0;
-    final int TYPE_CONTACT = 1;
     Context context;
     List<NewGoodsBean> mGoodsList;
     String footer;
     boolean isMore;
     boolean isDragging;
+    View.OnClickListener listener;
 
     public boolean isMore() {
         return isMore;
@@ -58,27 +61,37 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public GoodsAdapter(Context context, List<NewGoodsBean> mGoods) {
+    public GoodsAdapter(final Context context, List<NewGoodsBean> mGoods) {
         this.context = context;
         mGoodsList = new ArrayList<>();
         this.mGoodsList.addAll(mGoods);
+        listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int cartId = (int) v.getTag(R.id.tag_first);
+                Intent intent = new Intent(context, BoutiqueChildActivity.class);
+                intent.putExtra(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS,cartId);
+                context.startActivity(intent);
+            }
+        };
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layout = null;
-        if (viewType == TYPE_FOOTER) {
+        if (viewType == I.TYPE_FOOTER) {
             layout = LayoutInflater.from(context).inflate(R.layout.footer_item, null);
             return new FooterViewHolder(layout);
         } else {
             layout = LayoutInflater.from(context).inflate(R.layout.goods_adapter, null);
+            layout.setOnClickListener(listener);
             return new GoodsViewHolder(layout);
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position)==TYPE_FOOTER){
+        if (getItemViewType(position)==I.TYPE_FOOTER){
             FooterViewHolder fv = (FooterViewHolder) holder;
             fv.tvFooter.setText(getFooter());
             return;
@@ -91,14 +104,17 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         ImageLoader.downloadImg(context, gvh.ivGoodsThumb, goodsDetailsBean.getGoodsThumb());
         gvh.tvGoodName.setText(goodsDetailsBean.getGoodsName());
         gvh.tvGoodsPrice.setText(goodsDetailsBean.getCurrencyPrice());
+        gvh.itemView.setTag(R.id.tag_first,goodsDetailsBean.getCatId());
+        gvh.itemView.setTag(R.id.tag_second,goodsDetailsBean.getGoodsName());
+        gvh.itemView.setTag(goodsDetailsBean.getCatId());
     }
 
     @Override
     public int getItemViewType(int position) {
         if (position == getItemCount() - 1) {
-            return TYPE_FOOTER;
+            return I.TYPE_FOOTER;
         }
-        return TYPE_CONTACT;
+        return I.TYPE_ITEM;
     }
 
     @Override
@@ -111,6 +127,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
             this.mGoodsList.clear();
         }
         addList(mList);
+
     }
 
     public void addList(ArrayList<NewGoodsBean> mList) {

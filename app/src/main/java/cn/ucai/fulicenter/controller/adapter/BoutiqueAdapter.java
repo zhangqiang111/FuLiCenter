@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.controller.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +16,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
+import cn.ucai.fulicenter.controller.activity.BoutiqueChildActivity;
 import cn.ucai.fulicenter.model.bean.BoutiqueBean;
+import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
-import cn.ucai.fulicenter.view.FooterViewHolder;
 
 /**
  * Created by Administrator on 2017/1/11 0011.
@@ -29,15 +31,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
     String footer;
     boolean isMore;
     boolean isDragging;
-
-    public boolean isMore() {
-        return isMore;
-    }
-
-    public void setMore(boolean more) {
-        isMore = more;
-        notifyDataSetChanged();
-    }
+    View.OnClickListener listener;
 
     public boolean isDragging() {
         return isDragging;
@@ -57,50 +51,45 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public BoutiqueAdapter(Context context, List<BoutiqueBean> mGoods) {
+    public BoutiqueAdapter(final Context context, List<BoutiqueBean> mGoods) {
         this.context = context;
         mGoodsList = new ArrayList<>();
         this.mGoodsList.addAll(mGoods);
+        listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int cartId = (int) v.getTag(R.id.tag_first);
+                String name = (String) v.getTag(R.id.tag_second);
+                Intent intent = new Intent(context, BoutiqueChildActivity.class);
+                intent.putExtra(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS,cartId);
+                intent.putExtra("goodName",name);
+                context.startActivity(intent);
+            }
+        };
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View layout = null;
-        if (viewType == I.TYPE_FOOTER) {
-            layout = LayoutInflater.from(context).inflate(R.layout.footer_item, null);
-            return new FooterViewHolder(layout);
-        } else {
-            layout = LayoutInflater.from(context).inflate(R.layout.boutique_adapter, null);
-            return new BoutiqueViewHolder(layout);
-        }
+        View layout = LayoutInflater.from(context).inflate(R.layout.boutique_adapter, null);
+        layout.setOnClickListener(listener);
+        return new BoutiqueViewHolder(layout);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position)==I.TYPE_FOOTER){
-            FooterViewHolder fv = (FooterViewHolder) holder;
-            fv.tvFooter.setText(getFooter());
-            return;
-        }
-        BoutiqueViewHolder bvh = (BoutiqueViewHolder) holder;
+        BoutiqueViewHolder bv = (BoutiqueViewHolder) holder;
         BoutiqueBean boutiqueBean = mGoodsList.get(position);
-        ImageLoader.downloadImg(context,bvh.ivBoutiqueGoodsThumb,boutiqueBean.getImageurl());
-        bvh.tvTitle.setText(boutiqueBean.getTitle());
-        bvh.tvDescription.setText(boutiqueBean.getDescription());
-        bvh.tvName.setText(boutiqueBean.getName());
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (position == getItemCount() - 1) {
-            return I.TYPE_FOOTER;
-        }
-        return I.TYPE_ITEM;
+        bv.tvName.setText(boutiqueBean.getName());
+        bv.tvDescription.setText(boutiqueBean.getDescription());
+        bv.tvTitle.setText(boutiqueBean.getTitle());
+        ImageLoader.downloadImg(context, bv.ivBoutiqueGoodsThumb,boutiqueBean.getImageurl());
+        bv.itemView.setTag(R.id.tag_first,boutiqueBean.getId());
+        bv.itemView.setTag(R.id.tag_second,boutiqueBean.getName());
     }
 
     @Override
     public int getItemCount() {
-        return mGoodsList.size()+1;
+        return mGoodsList.size();
     }
 
     public void initData(ArrayList<BoutiqueBean> mList) {
@@ -108,12 +97,14 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
             this.mGoodsList.clear();
         }
         addList(mList);
+
     }
 
     public void addList(ArrayList<BoutiqueBean> mList) {
         this.mGoodsList.addAll(mList);
         notifyDataSetChanged();
     }
+
 
     static class BoutiqueViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.iv_boutique_goodsThumb)

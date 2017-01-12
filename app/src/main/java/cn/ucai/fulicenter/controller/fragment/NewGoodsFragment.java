@@ -47,7 +47,6 @@ public class NewGoodsFragment extends Fragment {
     TextView tvRefresh;
     IModelNewGoods model;
     ArrayList<NewGoodsBean> mList;
-    MainActivity context;
 
     public NewGoodsFragment() {
         // Required empty public constructor
@@ -59,7 +58,6 @@ public class NewGoodsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_new_goods, container, false);
         ButterKnife.bind(this, layout);
-        context = (MainActivity) getContext();
         model = new ModelNewGoods();
         initView();
         getData(pageId, ACTION_DOWNLOAD);
@@ -94,7 +92,21 @@ public class NewGoodsFragment extends Fragment {
     private void initView() {
         mList = new ArrayList<>();
         adapter = new GoodsAdapter(getContext(), mList);
-        manager = new GridLayoutManager(context, I.COLUM_NUM);
+        manager = new GridLayoutManager(getContext(), I.COLUM_NUM);
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                /*switch (adapter.getItemViewType(position)){
+                    case I.TYPE_FOOTER:
+                        return 2;
+                    case I.TYPE_ITEM:
+                        return 1;
+                    default:
+                        return 1;
+                }*/
+                return 1;
+            }
+        });
         recyNewGoods.setLayoutManager(manager);
         recyNewGoods.addItemDecoration(new SpaceItemDecoration(30));
         recyNewGoods.setHasFixedSize(true);
@@ -102,7 +114,8 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void getData(int pageId, final int action) {
-        model.downloadNewGoods(context, I.CAT_ID, pageId, new OnCompleteListener<NewGoodsBean[]>() {
+        int cartId = getActivity().getIntent().getIntExtra(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS, I.CAT_ID);
+        model.downloadNewGoods(getContext(), cartId, pageId, new OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
                 adapter.setMore(result != null && result.length > 0);
