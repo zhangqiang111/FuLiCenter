@@ -96,15 +96,14 @@ public class NewGoodsFragment extends Fragment {
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                /*switch (adapter.getItemViewType(position)){
+                switch (adapter.getItemViewType(position)){
                     case I.TYPE_FOOTER:
                         return 2;
                     case I.TYPE_ITEM:
                         return 1;
                     default:
                         return 1;
-                }*/
-                return 1;
+                }
             }
         });
         recyNewGoods.setLayoutManager(manager);
@@ -114,7 +113,7 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void getData(int pageId, final int action) {
-        int cartId = getActivity().getIntent().getIntExtra(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS, I.CAT_ID);
+        int cartId = getActivity().getIntent().getIntExtra(I.NewAndBoutiqueGoods.CAT_ID, I.CAT_ID);
         model.downloadNewGoods(getContext(), cartId, pageId, new OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {

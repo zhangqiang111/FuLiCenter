@@ -80,6 +80,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layout = null;
         if (viewType == I.TYPE_FOOTER) {
+//            layout = LayoutInflater.from(context).inflate(R.layout.footer_item,parent,false);
             layout = LayoutInflater.from(context).inflate(R.layout.footer_item, null);
             return new FooterViewHolder(layout);
         } else {
@@ -106,7 +107,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         gvh.tvGoodsPrice.setText(goodsDetailsBean.getCurrencyPrice());
         gvh.itemView.setTag(R.id.tag_first,goodsDetailsBean.getCatId());
         gvh.itemView.setTag(R.id.tag_second,goodsDetailsBean.getGoodsName());
-        gvh.itemView.setTag(goodsDetailsBean.getCatId());
+
     }
 
     @Override
