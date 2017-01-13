@@ -1,6 +1,8 @@
 package cn.ucai.fulicenter.controller.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +25,11 @@ public class CategoryChildActivity extends AppCompatActivity {
     @BindView(R.id.btSortTime)
     Button btSortTime;
     NewGoodsFragment newGoodsFragment;
-    boolean priceClick;
+    boolean priceClick = false;
+    boolean addTime = false;
+    int price = 0;
+    int addtime = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,17 +49,38 @@ public class CategoryChildActivity extends AppCompatActivity {
         int sortBy = I.SORT_BY_ADDTIME_ASC;
         switch (view.getId()) {
             case R.id.btSortPrice:
-                if (priceClick){
-                    sortBy = I.SORT_BY_ADDTIME_ASC;
-                }else {
-                    sortBy = I.SORT_BY_ADDTIME_DESC;
+                    if (priceClick) {
+                        sortBy = I.SORT_BY_PRICE_ASC;
+                        setDownDrawabele(btSortPrice);
+                    } else {
+                        sortBy = I.SORT_BY_PRICE_DESC;
+                        setUpDrawabele(btSortPrice);
                 }
-                priceClick=!priceClick;
+                priceClick = !priceClick;
                 break;
             case R.id.btSortTime:
-                sortBy = I.SORT_BY_PRICE_DESC;
+                    if (addTime) {
+                        sortBy = I.SORT_BY_ADDTIME_ASC;
+                        setDownDrawabele(btSortTime);
+                    } else {
+                        sortBy = I.SORT_BY_ADDTIME_DESC;
+                        setUpDrawabele(btSortTime);
+                    }
+                addTime = !addTime;
                 break;
         }
         newGoodsFragment.sortGoods(sortBy);
+    }
+
+    private void setDownDrawabele(Button button) {
+        Drawable drawaRight = ContextCompat.getDrawable(this, R.mipmap.arrow_order_down);
+        drawaRight.setBounds(0, 0, drawaRight.getMinimumWidth(), drawaRight.getMinimumHeight());
+        button.setCompoundDrawables(null, null, drawaRight, null);
+    }
+
+    private void setUpDrawabele(Button button) {
+        Drawable drawaRight = ContextCompat.getDrawable(this, R.mipmap.arrow_order_up);
+        drawaRight.setBounds(0, 0, drawaRight.getMinimumWidth(), drawaRight.getMinimumHeight());
+        button.setCompoundDrawables(null, null, drawaRight, null);
     }
 }

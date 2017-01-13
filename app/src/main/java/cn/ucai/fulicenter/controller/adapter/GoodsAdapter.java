@@ -165,9 +165,9 @@ public class GoodsAdapter extends RecyclerView.Adapter {
                 int result = 0;
                 switch (sortBy){
                     case I.SORT_BY_ADDTIME_ASC:
-                        return result = Integer.valueOf(o1.getAddTime())-Integer.valueOf(o2.getAddTime());
+                        return (int) (o1.getAddTime()-o2.getAddTime());
                     case I.SORT_BY_ADDTIME_DESC:
-                        return result = Integer.valueOf(o2.getAddTime())-Integer.valueOf(o1.getAddTime());
+                        return (int) (o2.getAddTime()-o1.getAddTime());
                     case I.SORT_BY_PRICE_ASC:
                         return getPrice(o1.getCurrencyPrice())-getPrice(o2.getCurrencyPrice());
                     case I.SORT_BY_PRICE_DESC:
