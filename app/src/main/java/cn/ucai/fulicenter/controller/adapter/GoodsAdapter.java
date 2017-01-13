@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -156,5 +158,30 @@ public class GoodsAdapter extends RecyclerView.Adapter {
             ButterKnife.bind(this, view);
         }
     }
+    public void sort(final int sortBy){
+        Collections.sort(mGoodsList, new Comparator<NewGoodsBean>() {
+            @Override
+            public int compare(NewGoodsBean o1, NewGoodsBean o2) {
+                int result = 0;
+                switch (sortBy){
+                    case I.SORT_BY_ADDTIME_ASC:
+                        return result = Integer.valueOf(o1.getAddTime())-Integer.valueOf(o2.getAddTime());
+                    case I.SORT_BY_ADDTIME_DESC:
+                        return result = Integer.valueOf(o2.getAddTime())-Integer.valueOf(o1.getAddTime());
+                    case I.SORT_BY_PRICE_ASC:
+                        return getPrice(o1.getCurrencyPrice())-getPrice(o2.getCurrencyPrice());
+                    case I.SORT_BY_PRICE_DESC:
+                        return getPrice(o2.getCurrencyPrice())-getPrice(o1.getCurrencyPrice());
+                }
+                return 0;
+            }
+        });
+        notifyDataSetChanged();
 
+    }
+
+    private int getPrice(String currencyPrice) {
+        int price = Integer.valueOf(currencyPrice.substring(currencyPrice.indexOf("￥")+1));
+        return price;
+    }
 }

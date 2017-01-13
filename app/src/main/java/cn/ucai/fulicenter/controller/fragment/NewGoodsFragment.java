@@ -64,7 +64,9 @@ public class NewGoodsFragment extends Fragment {
         setListener();
         return layout;
     }
-
+    public void sortGoods(int sortBy){
+        adapter.sort(sortBy);
+    }
     private void setListener() {
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

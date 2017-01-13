@@ -7,8 +7,10 @@ import android.content.Intent;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.controller.activity.BoutiqueChildActivity;
+import cn.ucai.fulicenter.controller.activity.CategoryChildActivity;
 import cn.ucai.fulicenter.controller.activity.GoodsDetailsActivity;
 import cn.ucai.fulicenter.model.bean.BoutiqueBean;
+import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
 
 /**
  * Created by Administrator on 2017/1/10 0010.
@@ -38,5 +40,11 @@ public class MFGT {
         Intent intetn = new Intent(context, GoodsDetailsActivity.class);
         intetn.putExtra(I.Goods.KEY_GOODS_ID,goodsId);
         startActivity((Activity) context,intetn);
+    }
+
+    public static void gotoCategoryChild(Context context, int cartId) {
+        Intent intent = new Intent(context, CategoryChildActivity.class);
+        intent.putExtra(I.NewAndBoutiqueGoods.CAT_ID,cartId);
+        startActivity((Activity) context,intent);
     }
 }

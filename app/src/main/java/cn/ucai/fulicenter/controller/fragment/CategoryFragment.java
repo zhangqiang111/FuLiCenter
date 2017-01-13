@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.controller.fragment;
 
+import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,11 +17,17 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.I;
+import cn.ucai.fulicenter.controller.activity.CategoryChildActivity;
 import cn.ucai.fulicenter.controller.adapter.CategoryAdapter;
+import cn.ucai.fulicenter.controller.adapter.GoodsAdapter;
 import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
+import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 import cn.ucai.fulicenter.model.net.IModelCategory;
+import cn.ucai.fulicenter.model.net.IModelCategoryChild;
 import cn.ucai.fulicenter.model.net.ModelCategory;
+import cn.ucai.fulicenter.model.net.ModelCategoryChild;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.ConvertUtils;
 
@@ -32,9 +39,11 @@ public class CategoryFragment extends Fragment {
     IModelCategory model;
     int groupCount;
     CategoryAdapter adapter;
+    GoodsAdapter gAdapter;
     ArrayList<CategoryGroupBean> mGroupList;
     ArrayList<ArrayList<CategoryChildBean>> mChildList;
-
+    ArrayList<NewGoodsBean> list;
+    IModelCategoryChild childModel;
     public CategoryFragment() {
         // Required empty public constructor
     }
@@ -46,16 +55,18 @@ public class CategoryFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_category, container, false);
         ButterKnife.bind(this, layout);
         model = new ModelCategory();
+        childModel = new ModelCategoryChild();
         mGroupList = new ArrayList<>();
         mChildList = new ArrayList<>();
+        list = new ArrayList<>();
         adapter = new CategoryAdapter(getContext(), mGroupList, mChildList);
+        gAdapter = new GoodsAdapter(getContext(),list);
         expandListView.setAdapter(adapter);
         expandListView.setGroupIndicator(null);
         initView();
         initData();
         return layout;
     }
-
     private void initData() {
         model.getCategoryGroupData(getContext(), new OnCompleteListener<CategoryGroupBean[]>() {
             @Override

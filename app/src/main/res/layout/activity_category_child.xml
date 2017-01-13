@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_category_child"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_boutique"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/blue">
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onBack"
+            android:src="@drawable/back"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btSortPrice"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="价格排序"
+            android:gravity="center"
+            android:onClick="onClik"
+            android:drawableRight="@mipmap/arrow_order_down"
+            android:background="@color/colorAccent"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="5dp"
+            android:layout_height="1dp"/>
+        <Button
+            android:id="@+id/btSortTime"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="上架时间排序"
+            android:gravity="center"
+            android:drawableRight="@mipmap/arrow_order_down"
+            android:background="@color/colorAccent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/Layout_Container"
+        android:layout_width="match_parent"
+        android:layout_below="@id/rl_boutique"
+        android:layout_height="match_parent">
+    </FrameLayout>
+</LinearLayout>
