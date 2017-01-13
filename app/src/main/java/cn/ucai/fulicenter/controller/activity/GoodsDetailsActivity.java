@@ -52,8 +52,12 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         Intent intent = getIntent();
         int goodsId = intent.getIntExtra(I.Goods.KEY_GOODS_ID, 0);
+        if (goodsId==0){
+            MFGT.finish(this);
+        }else {
         model = new ModelGoodsDetails();
         initData(goodsId);
+        }
     }
 
     private void initData(int goodsId) {
@@ -79,6 +83,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         webview.loadDataWithBaseURL(null,result.getGoodsBrief(),I.TEXT_HTML,I.UTF_8,null);
         salv.startPlayLoop(indictor,getAlbumImgUrl(result),getAlbumImgCount(result));
     }
+
 
     private int getAlbumImgCount(GoodsDetailsBean result) {
         if (result.getProperties()!=null&&result.getProperties().size()>0) {

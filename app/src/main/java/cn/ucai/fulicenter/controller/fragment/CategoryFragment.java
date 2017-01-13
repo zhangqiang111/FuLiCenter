@@ -1,24 +1,39 @@
 package cn.ucai.fulicenter.controller.fragment;
 
-import android.content.Context;
-import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
+import android.widget.TextView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.controller.adapter.CategoryAdapter;
+import cn.ucai.fulicenter.model.bean.CategoryChildBean;
+import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
+import cn.ucai.fulicenter.model.net.IModelCategory;
+import cn.ucai.fulicenter.model.net.ModelCategory;
+import cn.ucai.fulicenter.model.net.OnCompleteListener;
+import cn.ucai.fulicenter.model.utils.ConvertUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CategoryFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- */
 public class CategoryFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
+
+    @BindView(R.id.expandListView)
+    ExpandableListView expandListView;
+    IModelCategory model;
+    int groupCount;
+    CategoryAdapter adapter;
+    ArrayList<CategoryGroupBean> mGroupList;
+    ArrayList<ArrayList<CategoryChildBean>> mChildList;
 
     public CategoryFragment() {
         // Required empty public constructor
@@ -28,36 +43,64 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_category, container, false);
+        View layout = inflater.inflate(R.layout.fragment_category, container, false);
+        ButterKnife.bind(this, layout);
+        model = new ModelCategory();
+        mGroupList = new ArrayList<>();
+        mChildList = new ArrayList<>();
+        adapter = new CategoryAdapter(getContext(), mGroupList, mChildList);
+        expandListView.setAdapter(adapter);
+        initView();
+        initData();
+        return layout;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    private void initData() {
+        model.getCategoryGroupData(getContext(), new OnCompleteListener<CategoryGroupBean[]>() {
+            @Override
+            public void onSuccess(CategoryGroupBean[] result) {
+                if (result != null) {
+                    expandListView.setVisibility(View.VISIBLE);
+                    ArrayList<CategoryGroupBean> categoryGroupList = ConvertUtils.array2List(result);
+                    mGroupList.addAll(categoryGroupList);
+                    for (int i = 0; i < categoryGroupList.size(); i++) {
+                        downloadChildData(categoryGroupList.get(i).getId());
+                        Log.e("main", categoryGroupList.get(i).getId() + "");
+                    }
+                } else {
+                    initView();
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 
+    private void downloadChildData(int id) {
+        model.getCategoryChildData(getContext(), id, new OnCompleteListener<CategoryChildBean[]>() {
+            @Override
+            public void onSuccess(CategoryChildBean[] result) {
+                groupCount++;
+                if (result != null) {
+                    ArrayList<CategoryChildBean> list = ConvertUtils.array2List(result);
+                    mChildList.add(list);
+                }
+                if (groupCount == mGroupList.size()) {
+                    adapter.initData(mGroupList, mChildList);
+                }
+            }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    private void initView() {
+        expandListView.setVisibility(View.VISIBLE);
     }
 }
