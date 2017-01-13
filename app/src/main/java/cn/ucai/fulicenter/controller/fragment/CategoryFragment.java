@@ -50,6 +50,7 @@ public class CategoryFragment extends Fragment {
         mChildList = new ArrayList<>();
         adapter = new CategoryAdapter(getContext(), mGroupList, mChildList);
         expandListView.setAdapter(adapter);
+        expandListView.setGroupIndicator(null);
         initView();
         initData();
         return layout;
@@ -64,7 +65,8 @@ public class CategoryFragment extends Fragment {
                     ArrayList<CategoryGroupBean> categoryGroupList = ConvertUtils.array2List(result);
                     mGroupList.addAll(categoryGroupList);
                     for (int i = 0; i < categoryGroupList.size(); i++) {
-                        downloadChildData(categoryGroupList.get(i).getId());
+                        mChildList.add(new ArrayList<CategoryChildBean>());
+                        downloadChildData(categoryGroupList.get(i).getId(),i);
                         Log.e("main", categoryGroupList.get(i).getId() + "");
                     }
                 } else {
@@ -79,14 +81,14 @@ public class CategoryFragment extends Fragment {
         });
     }
 
-    private void downloadChildData(int id) {
-        model.getCategoryChildData(getContext(), id, new OnCompleteListener<CategoryChildBean[]>() {
+    private void downloadChildData(int groupId, final int index) {
+        model.getCategoryChildData(getContext(), groupId, new OnCompleteListener<CategoryChildBean[]>() {
             @Override
             public void onSuccess(CategoryChildBean[] result) {
                 groupCount++;
                 if (result != null) {
                     ArrayList<CategoryChildBean> list = ConvertUtils.array2List(result);
-                    mChildList.add(list);
+                    mChildList.set(index,list);
                 }
                 if (groupCount == mGroupList.size()) {
                     adapter.initData(mGroupList, mChildList);

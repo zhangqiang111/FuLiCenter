@@ -79,7 +79,8 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         GroupViewHolder gvh = null;
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.category_group, null);
+//            convertView = LayoutInflater.from(context).inflate(R.layout.category_group, null);
+            convertView = View.inflate(context,R.layout.category_group,null);
             gvh = new GroupViewHolder(convertView);
             convertView.setTag(gvh);
         } else {
@@ -96,7 +97,8 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ChildViewHolder cvh;
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.category_child, null);
+//            convertView = LayoutInflater.from(context).inflate(R.layout.category_child, null);
+            convertView = View.inflate(context,R.layout.category_child,null);
             cvh = new ChildViewHolder(convertView);
             convertView.setTag(cvh);
         } else {
