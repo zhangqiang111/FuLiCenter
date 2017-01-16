@@ -13,8 +13,10 @@
         android:background="@color/blue">
 
         <ImageView
+            android:id="@+id/ivBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onBack"
             android:src="@drawable/back" />
 
         <TextView
@@ -46,6 +48,7 @@
                 android:textSize="20sp" />
 
             <EditText
+                android:id="@+id/etUserName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
@@ -71,6 +74,7 @@
                 android:textSize="20sp" />
 
             <EditText
+                android:id="@+id/etNick"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
@@ -96,6 +100,7 @@
                 android:textSize="20sp" />
 
             <EditText
+                android:id="@+id/etPassword"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
@@ -121,6 +126,7 @@
                 android:textSize="20sp" />
 
             <EditText
+                android:id="@+id/etConfirm"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />

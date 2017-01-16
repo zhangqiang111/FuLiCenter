@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RadioButton;
 
@@ -108,6 +109,16 @@ public class MainActivity extends AppCompatActivity {
             setStatus();
             viewPager.setCurrentItem(index);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK&&event.getRepeatCount()==0){
+            viewPager.setCurrentItem(0);
+            radioButtons[4].setChecked(false);
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void setStatus() {
