@@ -54,21 +54,22 @@ public class MainActivity extends AppCompatActivity {
         fragments[3] = new CartFragment();
         fragments[4] = new CenterFragment();
         adapter = new MyViewAdapter(getSupportFragmentManager(),fragments);
+        viewPager.setOffscreenPageLimit(5);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
                 if (position==currentIndex){
                     return;
                 }
                 radioButtons[currentIndex].setChecked(false);
                 radioButtons[position].setChecked(true);
                 currentIndex=position;
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
             }
 
             @Override

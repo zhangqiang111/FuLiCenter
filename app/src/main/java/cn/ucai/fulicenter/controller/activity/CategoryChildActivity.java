@@ -15,6 +15,7 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.controller.fragment.NewGoodsFragment;
 import cn.ucai.fulicenter.model.utils.MFGT;
+import cn.ucai.fulicenter.view.CatFilterButton;
 
 public class CategoryChildActivity extends AppCompatActivity {
 
@@ -27,8 +28,8 @@ public class CategoryChildActivity extends AppCompatActivity {
     NewGoodsFragment newGoodsFragment;
     boolean priceClick = false;
     boolean addTime = false;
-    int price = 0;
-    int addtime = 0;
+    @BindView(R.id.cfButton)
+    CatFilterButton cfButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class CategoryChildActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category_child);
         ButterKnife.bind(this);
         newGoodsFragment = new NewGoodsFragment();
+        cfButton.initCatFilterButton(getIntent().getStringExtra(I.Category.KEY_NAME),null);
         getSupportFragmentManager().beginTransaction().add(R.id.Layout_Container, newGoodsFragment).commit();
     }
 
@@ -49,23 +51,23 @@ public class CategoryChildActivity extends AppCompatActivity {
         int sortBy = I.SORT_BY_ADDTIME_ASC;
         switch (view.getId()) {
             case R.id.btSortPrice:
-                    if (priceClick) {
-                        sortBy = I.SORT_BY_PRICE_ASC;
-                        setDownDrawabele(btSortPrice);
-                    } else {
-                        sortBy = I.SORT_BY_PRICE_DESC;
-                        setUpDrawabele(btSortPrice);
+                if (priceClick) {
+                    sortBy = I.SORT_BY_PRICE_ASC;
+                    setDownDrawabele(btSortPrice);
+                } else {
+                    sortBy = I.SORT_BY_PRICE_DESC;
+                    setUpDrawabele(btSortPrice);
                 }
                 priceClick = !priceClick;
                 break;
             case R.id.btSortTime:
-                    if (addTime) {
-                        sortBy = I.SORT_BY_ADDTIME_ASC;
-                        setDownDrawabele(btSortTime);
-                    } else {
-                        sortBy = I.SORT_BY_ADDTIME_DESC;
-                        setUpDrawabele(btSortTime);
-                    }
+                if (addTime) {
+                    sortBy = I.SORT_BY_ADDTIME_ASC;
+                    setDownDrawabele(btSortTime);
+                } else {
+                    sortBy = I.SORT_BY_ADDTIME_DESC;
+                    setUpDrawabele(btSortTime);
+                }
                 addTime = !addTime;
                 break;
         }
