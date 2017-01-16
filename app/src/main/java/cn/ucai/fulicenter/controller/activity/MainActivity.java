@@ -12,11 +12,13 @@ import android.widget.RadioButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.FuliCenterApplication;
 import cn.ucai.fulicenter.controller.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.controller.fragment.CartFragment;
 import cn.ucai.fulicenter.controller.fragment.CategoryFragment;
 import cn.ucai.fulicenter.controller.fragment.CenterFragment;
 import cn.ucai.fulicenter.controller.fragment.NewGoodsFragment;
+import cn.ucai.fulicenter.model.utils.MFGT;
 
 public class MainActivity extends AppCompatActivity {
     RadioButton[] radioButtons;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.viewPager)
     ViewPager viewPager;
     MyViewAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         fragments[2] = new CategoryFragment();
         fragments[3] = new CartFragment();
         fragments[4] = new CenterFragment();
-        adapter = new MyViewAdapter(getSupportFragmentManager(),fragments);
+        adapter = new MyViewAdapter(getSupportFragmentManager(), fragments);
         viewPager.setOffscreenPageLimit(5);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -64,12 +67,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (position==currentIndex){
+                if (position == currentIndex) {
                     return;
                 }
                 radioButtons[currentIndex].setChecked(false);
                 radioButtons[position].setChecked(true);
-                currentIndex=position;
+                currentIndex = position;
             }
 
             @Override
@@ -94,7 +97,11 @@ public class MainActivity extends AppCompatActivity {
                 index = 3;
                 break;
             case R.id.Layout_Personal_Center:
-                index = 4;
+                if (FuliCenterApplication.getUser() == null) {
+                    MFGT.gotoLogin(this);
+                } else {
+                    index = 4;
+                }
                 break;
         }
         if (index != currentIndex) {
@@ -113,10 +120,11 @@ public class MainActivity extends AppCompatActivity {
         }
         currentIndex = index;
     }
-    class MyViewAdapter extends FragmentPagerAdapter{
+
+    class MyViewAdapter extends FragmentPagerAdapter {
         Fragment[] fragments;
 
-        public MyViewAdapter(FragmentManager fm,Fragment[] fragments) {
+        public MyViewAdapter(FragmentManager fm, Fragment[] fragments) {
             super(fm);
             this.fragments = fragments;
         }
