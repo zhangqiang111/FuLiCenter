@@ -6,7 +6,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -14,6 +18,7 @@ import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.controller.fragment.NewGoodsFragment;
+import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.model.utils.MFGT;
 import cn.ucai.fulicenter.view.CatFilterButton;
 
@@ -30,14 +35,14 @@ public class CategoryChildActivity extends AppCompatActivity {
     boolean addTime = false;
     @BindView(R.id.cfButton)
     CatFilterButton cfButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_child);
         ButterKnife.bind(this);
         newGoodsFragment = new NewGoodsFragment();
-        cfButton.initCatFilterButton(getIntent().getStringExtra(I.Category.KEY_NAME),null);
+        ArrayList<CategoryChildBean> list = (ArrayList<CategoryChildBean>) getIntent().getSerializableExtra(I.CategoryChild.DATA);
+        cfButton.initCatFilterButton(getIntent().getStringExtra(I.Category.KEY_NAME),list);
         getSupportFragmentManager().beginTransaction().add(R.id.Layout_Container, newGoodsFragment).commit();
     }
 
