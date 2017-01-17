@@ -17,7 +17,7 @@ public class ModelUser implements IModelUser{
         OkHttpUtils<String> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_LOGIN)
                 .addParam(I.User.USER_NAME,username)
-                .addParam(I.User.PASSWORD,password)
+                .addParam(I.User.PASSWORD,MD5.getMessageDigest(password))
                 .targetClass(String.class)
                 .execute(listener);
     }
@@ -27,7 +27,7 @@ public class ModelUser implements IModelUser{
         OkHttpUtils<String> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_REGISTER)
                 .addParam(I.User.USER_NAME,username)
-                .addParam(I.User.PASSWORD, password)
+                .addParam(I.User.PASSWORD, MD5.getMessageDigest(password))
                 .addParam(I.User.NICK,nick)
                 .post()
                 .targetClass(String.class)
