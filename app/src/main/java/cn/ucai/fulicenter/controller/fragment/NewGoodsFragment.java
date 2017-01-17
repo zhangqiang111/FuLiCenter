@@ -2,6 +2,7 @@ package cn.ucai.fulicenter.controller.fragment;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.IMediaControllerCallback;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,9 +66,11 @@ public class NewGoodsFragment extends Fragment {
         setListener();
         return layout;
     }
-    public void sortGoods(int sortBy){
+
+    public void sortGoods(int sortBy) {
         adapter.sort(sortBy);
     }
+
     private void setListener() {
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -83,9 +87,12 @@ public class NewGoodsFragment extends Fragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 adapter.setDragging(newState == RecyclerView.SCROLL_STATE_DRAGGING);
                 int lastposition = manager.findLastVisibleItemPosition();
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && adapter.isMore() && lastposition == adapter.getItemCount() - 1) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && adapter.isMore() && lastposition == adapter.getItemCount()-1) {
                     pageId++;
                     getData(pageId, ACTION_PULL_UP);
+                }
+                if (!adapter.isMore()){
+                    getData(pageId,ACTION_PULL_UP);
                 }
             }
         });
@@ -98,7 +105,7 @@ public class NewGoodsFragment extends Fragment {
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                switch (adapter.getItemViewType(position)){
+                switch (adapter.getItemViewType(position)) {
                     case I.TYPE_FOOTER:
                         return 2;
                     case I.TYPE_ITEM:
@@ -121,7 +128,9 @@ public class NewGoodsFragment extends Fragment {
             public void onSuccess(NewGoodsBean[] result) {
                 adapter.setMore(result != null && result.length > 0);
                 if (!adapter.isMore()) {
-                    adapter.setFooter("没有更多的数据");
+//                    Toast.makeText(getContext(), "别扯了,没了",Toast.LENGTH_LONG).show();
+//                    adapter.setFooter("没有更多的数据");
+                    setTask();
                     return;
                 }
                 adapter.setFooter("加载更多的数据");
@@ -145,5 +154,21 @@ public class NewGoodsFragment extends Fragment {
             public void onError(String error) {
             }
         });
+    }
+
+    private void setTask() {
+//        final Toast toast = Toast.makeText(getContext(), info, Toast.LENGTH_SHORT);
+        final Toast toast1= new Toast(getContext());
+        View parent = LayoutInflater.from(getContext()).inflate(R.layout.item_toast,null);
+        TextView textView = (TextView) parent.findViewById(R.id.tvToast);
+        toast1.setView(parent);
+        toast1.show();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                toast1.cancel();
+            }
+        }, 1000);
+
     }
 }

@@ -41,6 +41,8 @@ public class BoutiqueFragment extends Fragment {
     BoutiqueAdapter adapter;
     LinearLayoutManager manager;
     IModelBoutique model;
+    @BindView(R.id.tvHint)
+    TextView tvHint;
 
     public BoutiqueFragment() {
         // Required empty public constructor
@@ -75,6 +77,8 @@ public class BoutiqueFragment extends Fragment {
             @Override
             public void onSuccess(BoutiqueBean[] result) {
                 ArrayList<BoutiqueBean> list = ConvertUtils.array2List(result);
+                tvHint.setVisibility(View.GONE);
+                srl.setVisibility(View.VISIBLE);
                 switch (action) {
                     case I.ACTION_DOWNLOAD:
                         adapter.initData(list);
@@ -94,6 +98,8 @@ public class BoutiqueFragment extends Fragment {
     }
 
     private void iniView() {
+        tvHint.setVisibility(View.VISIBLE);
+        srl.setVisibility(View.GONE);
         mList = new ArrayList<>();
         adapter = new BoutiqueAdapter(getContext(), mList);
         manager = new LinearLayoutManager(getContext());

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.model.utils.MD5;
 import cn.ucai.fulicenter.model.utils.OkHttpUtils;
 
 /**
@@ -26,7 +27,7 @@ public class ModelUser implements IModelUser{
         OkHttpUtils<String> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_REGISTER)
                 .addParam(I.User.USER_NAME,username)
-                .addParam(I.User.PASSWORD,password)
+                .addParam(I.User.PASSWORD, password)
                 .addParam(I.User.NICK,nick)
                 .post()
                 .targetClass(String.class)

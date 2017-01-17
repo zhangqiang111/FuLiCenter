@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,12 +17,12 @@ import cn.ucai.fulicenter.application.FuliCenterApplication;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.Result;
 import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.model.dao.UserDao;
 import cn.ucai.fulicenter.model.net.IModelUser;
 import cn.ucai.fulicenter.model.net.ModelUser;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.net.SharePrefrenceUtils;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
-import cn.ucai.fulicenter.model.utils.ConvertUtils;
 import cn.ucai.fulicenter.model.utils.MFGT;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
 
@@ -36,6 +37,9 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.etPassword)
     EditText etPassword;
     IModelUser model;
+    @BindView(R.id.ivBack)
+    ImageView ivBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.btLogin, R.id.btRegister})
+    @OnClick({R.id.btLogin, R.id.btRegister,R.id.ivBack})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btLogin:
@@ -52,20 +56,23 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.btRegister:
                 MFGT.gotoRegister(this);
                 break;
+            case R.id.ivBack:
+                MFGT.finish(this);
+                break;
         }
     }
 
     private void checkInput() {
         String username = etUserName.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
-        if (TextUtils.isEmpty(username)){
+        if (TextUtils.isEmpty(username)) {
             etUserName.setError(getResources().getString(R.string.user_name_connot_be_empty));
             etUserName.requestFocus();
-        } else if (TextUtils.isEmpty(password)){
+        } else if (TextUtils.isEmpty(password)) {
             etPassword.setError(getResources().getString(R.string.password_connot_be_empty));
             etPassword.requestFocus();
         } else {
-            login(username,password);
+            login(username, password);
         }
     }
 
@@ -76,22 +83,23 @@ public class LoginActivity extends AppCompatActivity {
         model.login(this, username, password, new OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
-                if (s!=null){
+                if (s != null) {
                     Result result = ResultUtils.getResultFromJson(s, User.class);
-                    if (result.isRetMsg()){
+                    if (result.isRetMsg()) {
                         User user = (User) result.getRetData();
+                        boolean saveUser = UserDao.getInstance().saveUser(user);
                         SharePrefrenceUtils.getInstance(LoginActivity.this).saveUser(user.getMuserName());
                         FuliCenterApplication.setUser(user);
                         MFGT.finish(LoginActivity.this);
                     } else {
-                        if (result.getRetCode()== I.MSG_LOGIN_UNKNOW_USER){
+                        if (result.getRetCode() == I.MSG_LOGIN_UNKNOW_USER) {
                             CommonUtils.showLongToast(getString(R.string.login_fail_unknow_user));
                         }
-                        if (result.getRetCode()== I.MSG_LOGIN_ERROR_PASSWORD){
+                        if (result.getRetCode() == I.MSG_LOGIN_ERROR_PASSWORD) {
                             CommonUtils.showLongToast(getString(R.string.login_fail_error_password));
                         }
                     }
-                }else {
+                } else {
                     CommonUtils.showLongToast(getString(R.string.login_fail));
 
                 }
@@ -107,4 +115,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 }

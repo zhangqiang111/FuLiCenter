@@ -111,15 +111,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode==KeyEvent.KEYCODE_BACK&&event.getRepeatCount()==0){
-            viewPager.setCurrentItem(0);
-            radioButtons[4].setChecked(false);
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
     private void setStatus() {
         for (int i = 0; i < radioButtons.length; i++) {
