@@ -15,6 +15,7 @@ public class SharePrefrenceUtils {
 
     public SharePrefrenceUtils(Context context) {
         preferences = context.getSharedPreferences(SHARE_PREFRENCE_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = preferences.edit();
     }
     public static SharePrefrenceUtils getInstance(Context context){
         if (instance==null){
@@ -29,5 +30,11 @@ public class SharePrefrenceUtils {
     }
     public static String getUser(){
         return preferences.getString(SHARE_PREFRENCE_NAME_USERNAME,null);
+    }
+
+
+    public void removeUser() {
+        preferences.edit().remove(SHARE_PREFRENCE_NAME_USERNAME);
+        preferences.edit().commit();
     }
 }

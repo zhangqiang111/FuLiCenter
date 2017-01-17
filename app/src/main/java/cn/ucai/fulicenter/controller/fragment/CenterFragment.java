@@ -11,11 +11,11 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuliCenterApplication;
 import cn.ucai.fulicenter.controller.activity.MainActivity;
 import cn.ucai.fulicenter.model.bean.User;
-import cn.ucai.fulicenter.model.net.SharePrefrenceUtils;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.model.utils.MFGT;
 
@@ -57,6 +57,18 @@ public class CenterFragment extends Fragment {
     private void loadUserInfo(User user) {
         ImageLoader.downloadImg(getActivity(), ivUserAvatar, user.getAvatarPath());
         tvUserName.setText(user.getMuserName());
+    }
+
+    @OnClick({R.id.tv_center_settings, R.id.center_user_info})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_center_settings:
+                MFGT.gotoSetting((MainActivity) getActivity());
+                break;
+            case R.id.center_user_info:
+                MFGT.gotoSetting((MainActivity) getActivity());
+                break;
+        }
     }
 
 }

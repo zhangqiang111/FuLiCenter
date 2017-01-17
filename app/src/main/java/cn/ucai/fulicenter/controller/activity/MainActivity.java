@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.controller.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuliCenterApplication;
+import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.controller.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.controller.fragment.CartFragment;
 import cn.ucai.fulicenter.controller.fragment.CategoryFragment;
@@ -140,6 +142,26 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return fragments.length;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (index == 4&&FuliCenterApplication.getUser()==null){
+            index = 0;
+        }
+        viewPager.setCurrentItem(index);
+        setStatus();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK&&requestCode== I.REQUEST_CODE_LOGIN){
+            index = 4;
+            viewPager.setCurrentItem(index);
+            setStatus();
         }
     }
 }
