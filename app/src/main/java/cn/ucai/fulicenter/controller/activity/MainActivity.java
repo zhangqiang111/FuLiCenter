@@ -3,13 +3,9 @@ package cn.ucai.fulicenter.controller.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RadioButton;
 
@@ -23,7 +19,6 @@ import cn.ucai.fulicenter.controller.fragment.CartFragment;
 import cn.ucai.fulicenter.controller.fragment.CategoryFragment;
 import cn.ucai.fulicenter.controller.fragment.CenterFragment;
 import cn.ucai.fulicenter.controller.fragment.NewGoodsFragment;
-import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.model.utils.MFGT;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,9 +26,16 @@ public class MainActivity extends AppCompatActivity {
     RadioButton mNewgoods, mBoutique, mCart, mCategory, mCenter;
     int index, currentIndex;
     Fragment[] fragments;
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
-    MyViewAdapter adapter;
+    @BindView(R.id.Layout_NewGoods)
+    RadioButton mLayoutNewGoods;
+    @BindView(R.id.Layout_Boutique)
+    RadioButton mLayoutBoutique;
+    @BindView(R.id.Layout_Category)
+    RadioButton mLayoutCategory;
+    @BindView(R.id.Layout_Cart)
+    RadioButton mLayoutCart;
+    @BindView(R.id.Layout_Personal_Center)
+    RadioButton mLayoutPersonalCenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,23 +48,22 @@ public class MainActivity extends AppCompatActivity {
     private void initVeiw() {
         radioButtons = new RadioButton[5];
         fragments = new Fragment[5];
-        mNewgoods = (RadioButton) findViewById(R.id.Layout_NewGoods);
-        mBoutique = (RadioButton) findViewById(R.id.Layout_Boutique);
-        mCart = (RadioButton) findViewById(R.id.Layout_Cart);
-        mCategory = (RadioButton) findViewById(R.id.Layout_Category);
-        mCenter = (RadioButton) findViewById(R.id.Layout_Personal_Center);
-        radioButtons[0] = mNewgoods;
-        radioButtons[1] = mBoutique;
-        radioButtons[2] = mCategory;
-        radioButtons[3] = mCart;
-        radioButtons[4] = mCenter;
+        radioButtons[0] = mLayoutNewGoods;
+        radioButtons[1] = mLayoutBoutique;
+        radioButtons[2] = mLayoutCategory;
+        radioButtons[3] = mLayoutCart;
+        radioButtons[4] = mLayoutPersonalCenter;
 
         fragments[0] = new NewGoodsFragment();
         fragments[1] = new BoutiqueFragment();
         fragments[2] = new CategoryFragment();
         fragments[3] = new CartFragment();
         fragments[4] = new CenterFragment();
-        adapter = new MyViewAdapter(getSupportFragmentManager(), fragments);
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.Layout_Container, fragments[0])
+                .commit();
+       /* adapter = new MyViewAdapter(getSupportFragmentManager(), fragments);
         viewPager.setOffscreenPageLimit(5);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
 
             }
-        });
+        });*/
     }
 
     public void onCheckedChange(View view) {
@@ -105,17 +106,26 @@ public class MainActivity extends AppCompatActivity {
             case R.id.Layout_Personal_Center:
                 if (FuliCenterApplication.getUser() == null) {
                     MFGT.gotoLogin(this);
+                    radioButtons[4].setChecked(false);
                 } else {
                     index = 4;
                 }
                 break;
         }
+        setFragment();
         if (index != currentIndex) {
             setStatus();
-            viewPager.setCurrentItem(index);
         }
     }
 
+    private void setFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.hide(fragments[currentIndex]);
+        if (!fragments[index].isAdded()) {
+            ft.add(R.id.Layout_Container, fragments[index]);
+        }
+        ft.show(fragments[index]).commitAllowingStateLoss();
+    }
 
     private void setStatus() {
         for (int i = 0; i < radioButtons.length; i++) {
@@ -128,43 +138,25 @@ public class MainActivity extends AppCompatActivity {
         currentIndex = index;
     }
 
-    class MyViewAdapter extends FragmentPagerAdapter {
-        Fragment[] fragments;
-
-        public MyViewAdapter(FragmentManager fm, Fragment[] fragments) {
-            super(fm);
-            this.fragments = fragments;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragments[position];
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.length;
-        }
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(">>>>","Index:"+index+" currenIndex"+currentIndex);
-        if (index == 4&&FuliCenterApplication.getUser()==null){
+        Log.e(">>>>", "Index:" + index + " currenIndex" + currentIndex);
+        if (index == 4 && FuliCenterApplication.getUser() == null) {
             index = 0;
         }
-        viewPager.setCurrentItem(index);
+        setFragment();
         setStatus();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("Code","requestCode:"+requestCode+" resultCode:"+resultCode);
-        if (resultCode==RESULT_OK&&requestCode== I.REQUEST_CODE_LOGIN){
+        Log.e("Code", "requestCode:" + requestCode + " resultCode:" + resultCode);
+        if (resultCode == RESULT_OK && requestCode == I.REQUEST_CODE_LOGIN) {
             index = 4;
-            viewPager.setCurrentItem(index);
+            setFragment();
             setStatus();
         }
     }
