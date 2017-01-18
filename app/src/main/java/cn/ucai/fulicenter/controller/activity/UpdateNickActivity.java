@@ -40,6 +40,7 @@ public class UpdateNickActivity extends AppCompatActivity {
 
     private void intData() {
         mEtUpdateUserNick.setText(FuliCenterApplication.getUser().getMuserNick());
+        mEtUpdateUserNick.setSelection(mEtUpdateUserNick.getText().length());
     }
 
     @OnClick({R.id.ivBack, R.id.btSave})
@@ -65,6 +66,7 @@ public class UpdateNickActivity extends AppCompatActivity {
         model = new ModelUser();
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("更新昵称中...");
+        dialog.show();
         model.updateNick(this, user.getMuserName(), nick, new OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
