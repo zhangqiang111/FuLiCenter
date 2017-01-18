@@ -16,6 +16,7 @@ import cn.ucai.fulicenter.controller.activity.LoginActivity;
 import cn.ucai.fulicenter.controller.activity.MainActivity;
 import cn.ucai.fulicenter.controller.activity.RegisterActivity;
 import cn.ucai.fulicenter.controller.activity.SettingActivity;
+import cn.ucai.fulicenter.controller.activity.UpdateNickActivity;
 import cn.ucai.fulicenter.controller.fragment.CenterFragment;
 import cn.ucai.fulicenter.model.bean.BoutiqueBean;
 import cn.ucai.fulicenter.model.bean.CategoryChildBean;
@@ -59,9 +60,9 @@ public class MFGT {
         startActivity((Activity) context,intent);
     }
 
-    public static void gotoLogin(Activity mainActivity) {
+    public static void gotoLogin(Activity activity) {
 //        startActivity(mainActivity, LoginActivity.class);
-        mainActivity.startActivityForResult(new Intent(mainActivity,LoginActivity.class),I.REQUEST_CODE_LOGIN);
+        activity.startActivityForResult(new Intent(activity,LoginActivity.class),I.REQUEST_CODE_LOGIN);
     }
 
     public static void gotoRegister(LoginActivity loginActivity) {
@@ -70,5 +71,9 @@ public class MFGT {
 
     public static void gotoSetting(MainActivity activity) {
         startActivity(activity,SettingActivity.class);
+    }
+
+    public static void gotoUpdateNick(Activity activity) {
+        activity.startActivityForResult(new Intent(activity, UpdateNickActivity.class),I.REQUEST_CODE_NICK);
     }
 }

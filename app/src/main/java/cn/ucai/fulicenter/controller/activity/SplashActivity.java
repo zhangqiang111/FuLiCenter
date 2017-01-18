@@ -27,10 +27,8 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 String username = SharePrefrenceUtils.getInstance(SplashActivity.this).getUser();
-                Log.e(">>>>>>",username);
                 if (username!=null){
                     User user = UserDao.getInstance().getUser(username);
-                    Log.e(">>>>",user.toString());
                     if (user!=null){
                         FuliCenterApplication.setUser(user);
                     }

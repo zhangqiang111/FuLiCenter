@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RadioButton;
@@ -22,6 +23,7 @@ import cn.ucai.fulicenter.controller.fragment.CartFragment;
 import cn.ucai.fulicenter.controller.fragment.CategoryFragment;
 import cn.ucai.fulicenter.controller.fragment.CenterFragment;
 import cn.ucai.fulicenter.controller.fragment.NewGoodsFragment;
+import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.model.utils.MFGT;
 
 public class MainActivity extends AppCompatActivity {
@@ -148,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.e(">>>>","Index:"+index+" currenIndex"+currentIndex);
         if (index == 4&&FuliCenterApplication.getUser()==null){
             index = 0;
         }
@@ -158,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.e("Code","requestCode:"+requestCode+" resultCode:"+resultCode);
         if (resultCode==RESULT_OK&&requestCode== I.REQUEST_CODE_LOGIN){
             index = 4;
             viewPager.setCurrentItem(index);

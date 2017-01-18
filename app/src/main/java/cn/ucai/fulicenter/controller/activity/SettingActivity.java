@@ -1,7 +1,9 @@
 package cn.ucai.fulicenter.controller.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +13,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuliCenterApplication;
+import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.SharePrefrenceUtils;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
@@ -42,7 +45,21 @@ public class SettingActivity extends AppCompatActivity {
         mTvNick.setText(user.getMuserNick());
     }
 
-    @OnClick({R.id.ivBack, R.id.btQuit})
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("Code","requestCode:"+requestCode+" resultCode:"+resultCode);
+        if (resultCode==RESULT_OK&&requestCode== I.REQUEST_CODE_NICK){
+            initData(FuliCenterApplication.getUser());
+        }
+    }
+
+    @OnClick({R.id.ivBack, R.id.btQuit,R.id.ll_user_nick})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivBack:
@@ -53,6 +70,9 @@ public class SettingActivity extends AppCompatActivity {
                 SharePrefrenceUtils.getInstance(this).removeUser();
                 MFGT.gotoLogin(this);
                 finish();
+                break;
+            case R.id.ll_user_nick:
+                MFGT.gotoUpdateNick(this);
                 break;
         }
     }

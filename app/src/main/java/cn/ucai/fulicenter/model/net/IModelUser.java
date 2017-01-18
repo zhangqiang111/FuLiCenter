@@ -11,4 +11,5 @@ import cn.ucai.fulicenter.model.bean.User;
 public interface IModelUser {
     void login(Context context, String username, String password, OnCompleteListener<String> listener);
     void regiter(Context context, String username, String nick,String password, OnCompleteListener<String> listener);
+    void updateNick(Context context, String username, String newNick, OnCompleteListener<String> listener);
 }
