@@ -74,6 +74,7 @@ public class CenterFragment extends Fragment {
     private void loadCollectCount(String count) {
         mTvCollectCount.setText(count);
     }
+
     private void getCollectCount() {
         model = new ModelUser();
         model.collectCount(getContext(), FuliCenterApplication.getUser().getMuserName(), new OnCompleteListener<MessageBean>() {
