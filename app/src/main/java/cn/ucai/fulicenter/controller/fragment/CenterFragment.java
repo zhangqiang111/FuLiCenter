@@ -15,7 +15,11 @@ import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuliCenterApplication;
 import cn.ucai.fulicenter.controller.activity.MainActivity;
+import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.model.net.IModelUser;
+import cn.ucai.fulicenter.model.net.ModelUser;
+import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.model.utils.MFGT;
 
@@ -29,7 +33,9 @@ public class CenterFragment extends Fragment {
     ImageView ivUserAvatar;
     @BindView(R.id.tv_user_name)
     TextView tvUserName;
-
+    @BindView(R.id.tv_collect_count)
+    TextView mTvCollectCount;
+    IModelUser model;
     public CenterFragment() {
         // Required empty public constructor
     }
@@ -41,6 +47,7 @@ public class CenterFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_center, container, false);
         ButterKnife.bind(this, view);
         initData();
+        getCollectCount();
         return view;
     }
 
@@ -53,10 +60,37 @@ public class CenterFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getCollectCount();
+    }
 
     private void loadUserInfo(User user) {
         ImageLoader.downloadImg(getActivity(), ivUserAvatar, user.getAvatarPath());
         tvUserName.setText(user.getMuserName());
+        loadCollectCount("0");
+    }
+    private void loadCollectCount(String count) {
+        mTvCollectCount.setText(count);
+    }
+    private void getCollectCount() {
+        model = new ModelUser();
+        model.collectCount(getContext(), FuliCenterApplication.getUser().getMuserName(), new OnCompleteListener<MessageBean>() {
+            @Override
+            public void onSuccess(MessageBean result) {
+                if (result!=null&&result.isSuccess()){
+                    loadCollectCount(result.getMsg());
+                }else {
+                    loadCollectCount("0");
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 
     @OnClick({R.id.tv_center_settings, R.id.center_user_info})

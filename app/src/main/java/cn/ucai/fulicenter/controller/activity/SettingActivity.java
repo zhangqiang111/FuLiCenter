@@ -74,7 +74,7 @@ public class SettingActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.e("Code", "requestCode:" + requestCode + " resultCode:" + resultCode);
-        if (resultCode == RESULT_OK) {
+        if (resultCode != RESULT_OK) {
             return;
         }
         if (requestCode == I.REQUEST_CODE_NICK) {
@@ -94,7 +94,8 @@ public class SettingActivity extends AppCompatActivity {
         dialog.show();
         File file = null;
         file = new File(String.valueOf(OnSetAvatarListener.getAvatarFile(this,
-                OnSetAvatarListener.getAvatarPath(this, "/" + user.getMuserName() + user.getMavatarSuffix()))));
+                I.AVATAR_TYPE_USER_PATH+"/" + user.getMuserName() + user.getMavatarSuffix())));
+        Log.e(">>>>>>","文件路径"+file.getAbsolutePath());
         model.uploadAvatar(this, user.getMuserName(), file, new OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
