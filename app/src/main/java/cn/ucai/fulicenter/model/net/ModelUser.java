@@ -5,6 +5,7 @@ import android.content.Context;
 import java.io.File;
 
 import cn.ucai.fulicenter.application.I;
+import cn.ucai.fulicenter.model.bean.CartBean;
 import cn.ucai.fulicenter.model.bean.CollectBean;
 import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.User;
@@ -78,5 +79,30 @@ public class ModelUser implements IModelUser{
                 .addParam(I.PAGE_SIZE,String.valueOf(pageSize))
                 .targetClass(CollectBean[].class)
                 .execute(listener);
+    }
+
+    @Override
+    public void getCart(Context context, String username, OnCompleteListener<CartBean[]> listener) {
+
+    }
+
+    @Override
+    public void addCart(Context context, String username, int goodsId, int count, OnCompleteListener<CartBean[]> listener) {
+
+    }
+
+    @Override
+    public void deleteCart(Context context, int cartId, OnCompleteListener<CartBean[]> listener) {
+
+    }
+
+    @Override
+    public void updateCart(Context context, int cartId, int count, OnCompleteListener<CartBean[]> listener) {
+
+    }
+
+    @Override
+    public void updateCart(Context context, int action, String username, int goodsId, int count, OnCompleteListener<CartBean[]> listener) {
+
     }
 }

@@ -1,5 +1,9 @@
 package cn.ucai.fulicenter.controller.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +49,7 @@ public class CollectActivity extends AppCompatActivity {
     CollectAdapter mAdapter;
     GridLayoutManager mManager;
     User mUser;
+    UpdateCollectReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +64,14 @@ public class CollectActivity extends AppCompatActivity {
             initView();
             initData(pageId,I.ACTION_DOWNLOAD);
             setListener();
+            registerReceiver();
         }
+    }
+
+    private void registerReceiver() {
+        mReceiver = new UpdateCollectReceiver();
+        IntentFilter fliter = new IntentFilter(I.BROADCAST_UPDATA_COLLECT);
+        registerReceiver(mReceiver,fliter);
     }
 
     private void setListener() {
@@ -80,9 +92,6 @@ public class CollectActivity extends AppCompatActivity {
                 int lastposition = mManager.findLastVisibleItemPosition();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && mAdapter.isMore() && lastposition == mAdapter.getItemCount() - 1) {
                     pageId++;
-                    initData(pageId, I.ACTION_PULL_UP);
-                }
-                if (!mAdapter.isMore()) {
                     initData(pageId, I.ACTION_PULL_UP);
                 }
             }
@@ -132,10 +141,39 @@ public class CollectActivity extends AppCompatActivity {
         mList = new ArrayList<>();
         mAdapter = new CollectAdapter(this, mList);
         mManager = new GridLayoutManager(this, 2);
+        mManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                switch (mAdapter.getItemViewType(position)) {
+                    case I.TYPE_FOOTER:
+                        return 2;
+                    case I.TYPE_ITEM:
+                        return 1;
+                    default:
+                        return 1;
+                }
+            }
+        });
         mRecyNewGoods.setLayoutManager(mManager);
         mRecyNewGoods.addItemDecoration(new SpaceItemDecoration(30));
 
         mRecyNewGoods.setAdapter(mAdapter);
         DisplayUtils.initBackWithTitle(this, "个人收藏");
+    }
+    class UpdateCollectReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int goodsId = intent.getIntExtra(I.Collect.GOODS_ID,0);
+            mAdapter.removeItem(goodsId);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mReceiver==null){
+            unregisterReceiver(mReceiver);
+        }
     }
 }

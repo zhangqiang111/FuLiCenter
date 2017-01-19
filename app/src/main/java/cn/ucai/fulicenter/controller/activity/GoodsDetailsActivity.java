@@ -136,6 +136,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
                             isCollect=!isCollect;
                             setCollectStatus();
                             CommonUtils.showLongToast(result.getMsg());
+                            sendBroadcast(new Intent(I.BROADCAST_UPDATA_COLLECT).putExtra(I.Collect.GOODS_ID,goodsId));
                         }
                     }
 

@@ -27,6 +27,10 @@ public class CollectBean implements Serializable{
     private String goodsImg;
     private long addTime;
 
+    public CollectBean(int goodsId) {
+        this.goodsId = goodsId;
+    }
+
     public int getId() {
         return id;
     }
@@ -103,5 +107,40 @@ public class CollectBean implements Serializable{
                 ", goodsImg='" + goodsImg + '\'' +
                 ", addTime=" + addTime +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CollectBean)) return false;
+
+        CollectBean that = (CollectBean) o;
+
+        if (getId() != that.getId()) return false;
+        if (getGoodsId() != that.getGoodsId()) return false;
+        if (getAddTime() != that.getAddTime()) return false;
+        if (getUserName() != null ? !getUserName().equals(that.getUserName()) : that.getUserName() != null)
+            return false;
+        if (getGoodsName() != null ? !getGoodsName().equals(that.getGoodsName()) : that.getGoodsName() != null)
+            return false;
+        if (getGoodsEnglishName() != null ? !getGoodsEnglishName().equals(that.getGoodsEnglishName()) : that.getGoodsEnglishName() != null)
+            return false;
+        if (getGoodsThumb() != null ? !getGoodsThumb().equals(that.getGoodsThumb()) : that.getGoodsThumb() != null)
+            return false;
+        return getGoodsImg() != null ? getGoodsImg().equals(that.getGoodsImg()) : that.getGoodsImg() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId();
+        result = 31 * result + (getUserName() != null ? getUserName().hashCode() : 0);
+        result = 31 * result + getGoodsId();
+        result = 31 * result + (getGoodsName() != null ? getGoodsName().hashCode() : 0);
+        result = 31 * result + (getGoodsEnglishName() != null ? getGoodsEnglishName().hashCode() : 0);
+        result = 31 * result + (getGoodsThumb() != null ? getGoodsThumb().hashCode() : 0);
+        result = 31 * result + (getGoodsImg() != null ? getGoodsImg().hashCode() : 0);
+        result = 31 * result + (int) (getAddTime() ^ (getAddTime() >>> 32));
+        return result;
     }
 }

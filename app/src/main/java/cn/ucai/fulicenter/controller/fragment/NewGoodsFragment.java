@@ -129,8 +129,8 @@ public class NewGoodsFragment extends Fragment {
                 adapter.setMore(result != null && result.length > 0);
                 if (!adapter.isMore()) {
 //                    Toast.makeText(getContext(), "别扯了,没了",Toast.LENGTH_LONG).show();
-//                    adapter.setFooter("没有更多的数据");
-                    setTask();
+                    adapter.setFooter("没有更多的数据");
+//                    setTask();
                     return;
                 }
                 adapter.setFooter("加载更多的数据");
