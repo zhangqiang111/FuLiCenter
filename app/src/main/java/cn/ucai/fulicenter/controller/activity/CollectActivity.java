@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuliCenterApplication;
+import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.controller.adapter.CollectAdapter;
 import cn.ucai.fulicenter.controller.adapter.GoodsAdapter;
 import cn.ucai.fulicenter.model.bean.CollectBean;
@@ -42,30 +44,77 @@ public class CollectActivity extends AppCompatActivity {
     SwipeRefreshLayout mSrl;
     CollectAdapter mAdapter;
     GridLayoutManager mManager;
+    User mUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collect);
         ButterKnife.bind(this);
-        User user = FuliCenterApplication.getUser();
-        if (user == null) {
+        mUser = FuliCenterApplication.getUser();
+        if (mUser == null) {
             MFGT.gotoLogin(this);
             finish();
         } else {
             initView();
-            initData(user.getMuserName());
+            initData(pageId,I.ACTION_DOWNLOAD);
+            setListener();
         }
     }
 
-    private void initData(String muserName) {
+    private void setListener() {
+        mSrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSrl.setRefreshing(true);
+                mTvRefresh.setVisibility(View.VISIBLE);
+                pageId = 1;
+                initData(pageId, I.ACTION_PULL_DOWN);
+            }
+        });
+        mRecyNewGoods.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                mAdapter.setDragging(newState == RecyclerView.SCROLL_STATE_DRAGGING);
+                int lastposition = mManager.findLastVisibleItemPosition();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mAdapter.isMore() && lastposition == mAdapter.getItemCount() - 1) {
+                    pageId++;
+                    initData(pageId, I.ACTION_PULL_UP);
+                }
+                if (!mAdapter.isMore()) {
+                    initData(pageId, I.ACTION_PULL_UP);
+                }
+            }
+        });
+    }
+
+    private void initData(int pageId, final int action) {
         model = new ModelUser();
-        model.getCollect(this, muserName, pageId, 10, new OnCompleteListener<CollectBean[]>() {
+        model.getCollect(this, mUser.getMuserName(), pageId, 10, new OnCompleteListener<CollectBean[]>() {
             @Override
             public void onSuccess(CollectBean[] result) {
+                mAdapter.setMore(result != null && result.length > 0);
+                if (!mAdapter.isMore()) {
+                    mAdapter.setFooter("没有更多的数据");
+                    return;
+                }
+                mAdapter.setFooter("加载更多的数据");
                 if (result != null) {
                     ArrayList<CollectBean> list = ConvertUtils.array2List(result);
-                    mAdapter.initData(list);
-                    Log.e(">>>>>>",list.size()+"");
+                    switch (action) {
+                        case I.ACTION_DOWNLOAD:
+                            mAdapter.initData(list);
+                            break;
+                        case I.ACTION_PULL_DOWN:
+                            mSrl.setRefreshing(false);
+                            mTvRefresh.setVisibility(View.GONE);
+                            mAdapter.initData(list);
+                            break;
+                        case I.ACTION_PULL_UP:
+                            mAdapter.addList(list);
+                            break;
+                    }
                 }
             }
 
@@ -78,11 +127,11 @@ public class CollectActivity extends AppCompatActivity {
 
     private void initView() {
         mSrl.setColorSchemeColors(getResources().getColor(R.color.blue),
-                                  getResources().getColor(R.color.red),
-                                  getResources().getColor(R.color.green));
+                getResources().getColor(R.color.red),
+                getResources().getColor(R.color.green));
         mList = new ArrayList<>();
-        mAdapter = new CollectAdapter(this,mList);
-        mManager = new GridLayoutManager(this,2);
+        mAdapter = new CollectAdapter(this, mList);
+        mManager = new GridLayoutManager(this, 2);
         mRecyNewGoods.setLayoutManager(mManager);
         mRecyNewGoods.addItemDecoration(new SpaceItemDecoration(30));
 
