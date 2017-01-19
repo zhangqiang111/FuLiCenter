@@ -14,10 +14,16 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.FuliCenterApplication;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.controller.activity.BoutiqueChildActivity;
 import cn.ucai.fulicenter.model.bean.CollectBean;
+import cn.ucai.fulicenter.model.bean.MessageBean;
+import cn.ucai.fulicenter.model.net.IModelGoodsDetails;
+import cn.ucai.fulicenter.model.net.ModelGoodsDetails;
+import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.model.utils.MFGT;
 import cn.ucai.fulicenter.view.FooterViewHolder;
@@ -33,6 +39,7 @@ public class CollectAdapter extends RecyclerView.Adapter {
     boolean isMore;
     boolean isDragging;
     View.OnClickListener listener;
+    IModelGoodsDetails model;
 
     public boolean isMore() {
         return isMore;
@@ -65,15 +72,7 @@ public class CollectAdapter extends RecyclerView.Adapter {
         this.context = context;
         mGoodsList = new ArrayList<>();
         this.mGoodsList.addAll(mGoods);
-        listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int cartId = (int) v.getTag(R.id.tag_first);
-                Intent intent = new Intent(context, BoutiqueChildActivity.class);
-                intent.putExtra(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS, cartId);
-                context.startActivity(intent);
-            }
-        };
+        model = new ModelGoodsDetails();
     }
 
     @Override
@@ -101,17 +100,7 @@ public class CollectAdapter extends RecyclerView.Adapter {
         if (holder != null) {
             gvh = (CollectViewHolder) holder;
         }
-        final CollectBean mCollectBean = mGoodsList.get(position);
-        ImageLoader.downloadImg(context, gvh.mIvGoodsThumb, mCollectBean.getGoodsThumb());
-        gvh.mTvGoodName.setText(mCollectBean.getGoodsName());
-        gvh.itemView.setTag(R.id.tag_first, mCollectBean.getId());
-        gvh.itemView.setTag(R.id.tag_second, mCollectBean.getGoodsName());
-        gvh.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MFGT.gotoGoodsDetails(context, mCollectBean.getGoodsId());
-            }
-        });
+        gvh.bind(position);
 
     }
 
@@ -142,17 +131,52 @@ public class CollectAdapter extends RecyclerView.Adapter {
     }
 
 
-    static class CollectViewHolder extends RecyclerView.ViewHolder{
+
+
+    class CollectViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivGoodsThumb)
         ImageView mIvGoodsThumb;
         @BindView(R.id.tvGoodName)
         TextView mTvGoodName;
         @BindView(R.id.ivDelete)
         ImageView mIvDelete;
+        int itemPositon;
 
         CollectViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+        }
+
+        public void bind(int position) {
+            ImageLoader.downloadImg(context, mIvGoodsThumb, mGoodsList.get(position).getGoodsThumb());
+            mTvGoodName.setText(mGoodsList.get(position).getGoodsName());
+            itemPositon = position;
+        }
+        @OnClick({R.id.ivDelete, R.id.rl_layout})
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.ivDelete:
+                    model.setCollect(context, mGoodsList.get(itemPositon).getGoodsId(), FuliCenterApplication.getUser().getMuserName(), I.ACTION_DELETE_COLLECT, new OnCompleteListener<MessageBean>() {
+                        @Override
+                        public void onSuccess(MessageBean result) {
+                            if (result!=null&&result.isSuccess()){
+                                mGoodsList.remove(itemPositon);
+                                notifyDataSetChanged();
+
+                            }
+                        }
+
+                        @Override
+                        public void onError(String error) {
+
+                        }
+                    });
+
+                    break;
+                case R.id.rl_layout:
+                    MFGT.gotoGoodsDetails(context,mGoodsList.get(itemPositon).getGoodsId());
+                    break;
+            }
         }
     }
 }
