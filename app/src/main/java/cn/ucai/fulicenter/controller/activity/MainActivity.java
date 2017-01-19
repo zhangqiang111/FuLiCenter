@@ -77,11 +77,16 @@ public class MainActivity extends AppCompatActivity {
                 index = 2;
                 break;
             case R.id.Layout_Cart:
-                index = 3;
+                if (FuliCenterApplication.getUser() == null) {
+                    MFGT.gotoLogin(this, I.REQUEST_CODE_LOGIN_FROM_CART);
+                    radioButtons[3].setChecked(false);
+                } else {
+                    index = 3;
+                }
                 break;
             case R.id.Layout_Personal_Center:
                 if (FuliCenterApplication.getUser() == null) {
-                    MFGT.gotoLogin(this);
+                    MFGT.gotoLogin(this, I.REQUEST_CODE_LOGIN);
                     radioButtons[4].setChecked(false);
                 } else {
                     index = 4;
@@ -130,8 +135,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.e("Code", "requestCode:" + requestCode + " resultCode:" + resultCode);
-        if (resultCode == RESULT_OK && requestCode == I.REQUEST_CODE_LOGIN) {
-            index = 4;
+        if (resultCode == RESULT_OK) {
+            if (requestCode == I.REQUEST_CODE_LOGIN) {
+                index = 4;
+            }
+            if (requestCode == I.REQUEST_CODE_LOGIN_FROM_CART) {
+                index = 3;
+            }
             setFragment();
             setStatus();
         }

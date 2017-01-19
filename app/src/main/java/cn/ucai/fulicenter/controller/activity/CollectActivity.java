@@ -58,7 +58,7 @@ public class CollectActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mUser = FuliCenterApplication.getUser();
         if (mUser == null) {
-            MFGT.gotoLogin(this);
+            MFGT.gotoLogin(this,I.REQUEST_CODE_LOGIN);
             finish();
         } else {
             initView();

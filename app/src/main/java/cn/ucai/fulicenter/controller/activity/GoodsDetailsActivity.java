@@ -128,7 +128,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         if (user != null) {
             setCollect(user);
         } else {
-            MFGT.gotoLogin(this);
+            MFGT.gotoLogin(this,I.REQUEST_CODE_LOGIN);
         }
     }
     @OnClick(R.id.ivCart)
@@ -138,7 +138,6 @@ public class GoodsDetailsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(MessageBean result) {
                 if (result!=null&&result.isSuccess()){
-                    FuliCenterApplication.getMyCartList().put(goodsId,null);
                     CommonUtils.showLongToast(R.string.add_goods_success);
                 }
 

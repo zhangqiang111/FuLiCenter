@@ -86,7 +86,7 @@ public class ModelUser implements IModelUser {
     public void getCart(Context context, String username, OnCompleteListener<CartBean[]> listener) {
         OkHttpUtils<CartBean[]> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_CARTS)
-                .addParam(I.User.USER_NAME, username)
+                .addParam(I.Cart.USER_NAME, username)
                 .targetClass(CartBean[].class)
                 .execute(listener);
     }
@@ -95,7 +95,7 @@ public class ModelUser implements IModelUser {
     public void addCart(Context context, String username, int goodsId, int count, OnCompleteListener<MessageBean> listener) {
         OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_ADD_CART)
-                .addParam(I.User.USER_NAME, username)
+                .addParam(I.Cart.USER_NAME, username)
                 .addParam(I.Cart.GOODS_ID, String.valueOf(goodsId))
                 .addParam(I.Cart.COUNT, String.valueOf(count))
                 .targetClass(MessageBean.class)
