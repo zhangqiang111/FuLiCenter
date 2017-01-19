@@ -100,9 +100,11 @@ public class CollectActivity extends AppCompatActivity {
 
     private void initData(int pageId, final int action) {
         model = new ModelUser();
-        model.getCollect(this, mUser.getMuserName(), pageId, 10, new OnCompleteListener<CollectBean[]>() {
+        model.getCollect(this, mUser.getMuserName(), pageId, I.PAGE_SIZE_DEFAULT, new OnCompleteListener<CollectBean[]>() {
             @Override
             public void onSuccess(CollectBean[] result) {
+                mSrl.setRefreshing(false);
+                mTvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(result != null && result.length > 0);
                 if (!mAdapter.isMore()) {
                     mAdapter.setFooter("没有更多的数据");
@@ -116,8 +118,6 @@ public class CollectActivity extends AppCompatActivity {
                             mAdapter.initData(list);
                             break;
                         case I.ACTION_PULL_DOWN:
-                            mSrl.setRefreshing(false);
-                            mTvRefresh.setVisibility(View.GONE);
                             mAdapter.initData(list);
                             break;
                         case I.ACTION_PULL_UP:

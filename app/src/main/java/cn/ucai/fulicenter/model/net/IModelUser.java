@@ -21,8 +21,8 @@ public interface IModelUser {
     void collectCount(Context context, String username, OnCompleteListener<MessageBean> listener);
     void getCollect(Context context, String username,int pageId,int pageSize, OnCompleteListener<CollectBean[]> listener);
     void getCart(Context context,String username ,OnCompleteListener<CartBean[]> listener);
-    void addCart(Context context,String username,int goodsId,int count, OnCompleteListener<CartBean[]> listener);
-    void deleteCart(Context context,int cartId, OnCompleteListener<CartBean[]> listener);
-    void updateCart(Context context,int cartId,int count, OnCompleteListener<CartBean[]> listener);
-    void updateCart(Context context,int action,String username,int goodsId,int count,OnCompleteListener<CartBean[]> listener);
+    void addCart(Context context,String username,int goodsId,int count, OnCompleteListener<MessageBean> listener);
+    void deleteCart(Context context,int cartId, OnCompleteListener<MessageBean> listener);
+    void updateCart(Context context,int cartId,int count, OnCompleteListener<MessageBean> listener);
+    void updateCart(Context context,int action,String username,int goodsId,int count,int cartId,OnCompleteListener<MessageBean> listener);
 }

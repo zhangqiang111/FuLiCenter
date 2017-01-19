@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,7 +23,9 @@ import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.IModelGoodsDetails;
+import cn.ucai.fulicenter.model.net.IModelUser;
 import cn.ucai.fulicenter.model.net.ModelGoodsDetails;
+import cn.ucai.fulicenter.model.net.ModelUser;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.MFGT;
@@ -54,13 +57,14 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     @BindView(R.id.ivCollect)
     ImageView mIvCollect;
     int goodsId;
-
+    IModelUser mModelUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_details);
         ButterKnife.bind(this);
         Intent intent = getIntent();
+        mModelUser = new ModelUser();
         goodsId = intent.getIntExtra(I.Goods.KEY_GOODS_ID, 0);
         if (goodsId == 0) {
             MFGT.finish(this);
@@ -126,6 +130,25 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         } else {
             MFGT.gotoLogin(this);
         }
+    }
+    @OnClick(R.id.ivCart)
+    public void onCart() {
+        User user = FuliCenterApplication.getUser();
+        mModelUser.updateCart(this, I.ACTION_CART_ADD,user.getMuserName(), goodsId, 1,0, new OnCompleteListener<MessageBean>() {
+            @Override
+            public void onSuccess(MessageBean result) {
+                if (result!=null&&result.isSuccess()){
+                    FuliCenterApplication.getMyCartList().put(goodsId,null);
+                    CommonUtils.showLongToast(R.string.add_goods_success);
+                }
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
     private void setCollect(User user){
         model.setCollect(this, goodsId, user.getMuserName(), isCollect ? I.ACTION_DELETE_COLLECT : I.ACTION_ADD_COLLECT,
