@@ -55,15 +55,16 @@ public class CenterFragment extends Fragment {
         User user = FuliCenterApplication.getUser();
         if (user != null) {
             loadUserInfo(user);
-        } else {
-            MFGT.gotoLogin((MainActivity) getActivity());
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getCollectCount();
+        initData();
+        if (FuliCenterApplication.getUser()!=null){
+            getCollectCount();
+        }
     }
 
     private void loadUserInfo(User user) {
@@ -94,7 +95,7 @@ public class CenterFragment extends Fragment {
         });
     }
 
-    @OnClick({R.id.tv_center_settings, R.id.center_user_info})
+    @OnClick({R.id.tv_center_settings, R.id.center_user_info,R.id.layout_center_collect})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_center_settings:
@@ -102,6 +103,9 @@ public class CenterFragment extends Fragment {
                 break;
             case R.id.center_user_info:
                 MFGT.gotoSetting((MainActivity) getActivity());
+                break;
+            case R.id.layout_center_collect:
+                MFGT.gotoCollectActivity(getActivity());
                 break;
         }
     }

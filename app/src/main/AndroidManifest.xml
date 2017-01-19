@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
 
     <application
         android:name=".application.FuliCenterApplication"
@@ -28,6 +31,8 @@
         <activity android:name=".controller.activity.RegisterActivity"/>
         <activity android:name=".controller.activity.SettingActivity"/>
         <activity android:name=".controller.activity.UpdateNickActivity">
+        </activity>
+        <activity android:name=".controller.activity.CollectActivity">
         </activity>
     </application>
 

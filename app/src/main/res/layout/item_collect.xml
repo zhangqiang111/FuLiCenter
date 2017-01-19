@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/ivGoodsThumb"
+        android:src="@drawable/nopic"
+        android:layout_width="match_parent"
+        android:scaleType="fitXY"
+        android:layout_height="250dp" />
+    <TextView
+        android:id="@+id/tvGoodName"
+        android:layout_width="wrap_content"
+        android:text="zzz"
+        android:layout_below="@id/ivGoodsThumb"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/ivDelete"
+        android:layout_width="wrap_content"
+        android:src="@mipmap/delete"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>
