@@ -216,6 +216,7 @@ public interface I {
         String COUNT="count";
         /**商品是否已被选中*/
         String IS_CHECKED="isChecked";
+        String PRICE = "cn.ucai.fulicenter.cart.price";
     }
 
     interface Collect{

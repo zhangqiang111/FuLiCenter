@@ -26,7 +26,8 @@
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
             android:layout_toLeftOf="@id/bt_account"
-            android:text="合计: ¥1"
+            android:layout_marginRight="15dp"
+            android:text="合计: ¥0"
             android:textColor="#f90"
             android:textSize="18sp"/>
     </RelativeLayout>

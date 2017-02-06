@@ -15,13 +15,18 @@ import cn.ucai.fulicenter.controller.activity.CollectActivity;
 import cn.ucai.fulicenter.controller.activity.GoodsDetailsActivity;
 import cn.ucai.fulicenter.controller.activity.LoginActivity;
 import cn.ucai.fulicenter.controller.activity.MainActivity;
+import cn.ucai.fulicenter.controller.activity.OrderActivity;
 import cn.ucai.fulicenter.controller.activity.RegisterActivity;
 import cn.ucai.fulicenter.controller.activity.SettingActivity;
 import cn.ucai.fulicenter.controller.activity.UpdateNickActivity;
+import cn.ucai.fulicenter.controller.fragment.CartFragment;
 import cn.ucai.fulicenter.controller.fragment.CenterFragment;
 import cn.ucai.fulicenter.model.bean.BoutiqueBean;
 import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
+
+import static android.R.attr.name;
+import static android.R.id.list;
 
 /**
  * Created by Administrator on 2017/1/10 0010.
@@ -84,5 +89,11 @@ public class MFGT {
 
     public static void gotoCollectActivity(Activity activity) {
         startActivity(activity, CollectActivity.class);
+    }
+
+    public static void gotoOrder(Context context, int priceSum) {
+        Intent intent = new Intent(context, OrderActivity.class);
+        intent.putExtra(I.Cart.PRICE,priceSum);
+        startActivity((Activity) context,intent);
     }
 }

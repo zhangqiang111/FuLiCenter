@@ -17,11 +17,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.FileFilter;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuliCenterApplication;
 import cn.ucai.fulicenter.application.I;
@@ -57,6 +57,7 @@ public class CartFragment extends Fragment {
     @BindView(R.id.recy_new_goods)
     RecyclerView mRecyNewGoods;
     UpdateCartReceiver mReceiver;
+    int priceSum = 0;
 
     public CartFragment() {
 
@@ -84,7 +85,7 @@ public class CartFragment extends Fragment {
     }
 
     private void initData(final int action) {
-        Log.e("UserName",mUser.getMuserName());
+        Log.e("UserName", mUser.getMuserName());
         if (mUser == null) {
             MFGT.gotoLogin(getActivity());
         } else {
@@ -147,16 +148,16 @@ public class CartFragment extends Fragment {
     }
 
     private void setPrice() {
-        int sumPrice = 0;
+        priceSum = 0;
         if (mList != null && mList.size() > 0) {
             for (CartBean cartBean : mList) {
                 GoodsDetailsBean goods = cartBean.getGoods();
                 if (cartBean.isChecked() && goods != null) {
-                    sumPrice += cartBean.getCount() * (getPrice(cartBean.getGoods().getCurrencyPrice()));
+                    priceSum += cartBean.getCount() * (getPrice(cartBean.getGoods().getCurrencyPrice()));
                 }
             }
         }
-        mTvSum.setText("合计: ¥" + sumPrice);
+        mTvSum.setText("合计: ¥" + priceSum);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -165,11 +166,18 @@ public class CartFragment extends Fragment {
         return price;
     }
 
+    @OnClick(R.id.bt_account)
+    public void onClick() {
+        if (priceSum > 0) {
+            MFGT.gotoOrder(getContext(), priceSum);
+        }
+    }
+
     class UpdateCartReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.e("UpdateCartReceiver","接收到");
+            Log.e("UpdateCartReceiver", "接收到");
             setPrice();
         }
     }
@@ -177,7 +185,7 @@ public class CartFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mReceiver!=null){
+        if (mReceiver != null) {
             getContext().unregisterReceiver(mReceiver);
         }
     }
