@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\debug\\layout\\activity_pingpp_payment.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\exploded-aar\\FuliCenter.lib\\pingpp\\unspecified\\res\\layout\\activity_pingpp_payment.xml"
+    },
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\debug\\layout\\fragment_pay_way_dialog.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\res\\layout\\fragment_pay_way_dialog.xml"
+    },
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\debug\\layout\\cmbkeyboard.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\exploded-aar\\FuliCenter.lib\\pingpp\\unspecified\\res\\layout\\cmbkeyboard.xml"
+    },
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\debug\\layout\\pingpp_activity_pay_successed.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\res\\layout\\pingpp_activity_pay_successed.xml"
+    },
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\debug\\layout\\pingpp_activity_pay.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\res\\layout\\pingpp_activity_pay.xml"
+    },
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\debug\\layout\\pingpp_pay_channel_item.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\res\\layout\\pingpp_pay_channel_item.xml"
+    }
+]

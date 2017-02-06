@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\release\\xml\\cmbkb_symbols.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\exploded-aar\\FuliCenter.lib\\pingpp\\unspecified\\res\\xml\\cmbkb_symbols.xml"
+    },
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\release\\xml\\cmbkb_number_with_x.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\exploded-aar\\FuliCenter.lib\\pingpp\\unspecified\\res\\xml\\cmbkb_number_with_x.xml"
+    },
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\release\\xml\\cmbkb_number_with_change.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\exploded-aar\\FuliCenter.lib\\pingpp\\unspecified\\res\\xml\\cmbkb_number_with_change.xml"
+    },
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\release\\xml\\cmbkb_qwerty.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\exploded-aar\\FuliCenter.lib\\pingpp\\unspecified\\res\\xml\\cmbkb_qwerty.xml"
+    },
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\release\\xml\\cmbkb_number_symbols.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\exploded-aar\\FuliCenter.lib\\pingpp\\unspecified\\res\\xml\\cmbkb_number_symbols.xml"
+    },
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\release\\xml\\cmbkb_number.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\exploded-aar\\FuliCenter.lib\\pingpp\\unspecified\\res\\xml\\cmbkb_number.xml"
+    },
+    {
+        "merged": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\release\\xml\\cmbkb_number_with_dot.xml",
+        "source": "D:\\AppWorkPlace\\FuliCenter\\lib\\pingpp_one\\build\\intermediates\\exploded-aar\\FuliCenter.lib\\pingpp\\unspecified\\res\\xml\\cmbkb_number_with_dot.xml"
+    }
+]
