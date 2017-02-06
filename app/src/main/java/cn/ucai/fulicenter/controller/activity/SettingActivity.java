@@ -88,13 +88,14 @@ public class SettingActivity extends AppCompatActivity {
 
     private void uploadAvatar() {
         model = new ModelUser();
-        User user = FuliCenterApplication.getUser();
+        final User user = FuliCenterApplication.getUser();
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage(getString(R.string.update_user_avatar));
         dialog.show();
         File file = null;
         file = new File(String.valueOf(OnSetAvatarListener.getAvatarFile(this,
                 I.AVATAR_TYPE_USER_PATH+"/" + user.getMuserName() + user.getMavatarSuffix())));
+        Log.e(">>>>>","文件是否存在:"+file.exists());
         Log.e(">>>>>>","文件路径"+file.getAbsolutePath());
         model.uploadAvatar(this, user.getMuserName(), file, new OnCompleteListener<String>() {
             @Override
@@ -104,6 +105,8 @@ public class SettingActivity extends AppCompatActivity {
                     Result result = ResultUtils.getListResultFromJson(s, User.class);
                     if (result != null) {
                         if (result.isRetMsg()) {
+                            /*User user1 = (User) result.getRetData();
+                            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user1),getBaseContext(),mIvAvatar);*/
                             msg = R.string.update_user_avatar_success;
                         }
                     }
