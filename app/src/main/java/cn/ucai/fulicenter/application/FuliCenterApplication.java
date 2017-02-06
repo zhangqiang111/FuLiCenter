@@ -4,6 +4,7 @@ import android.app.Application;
 
 import java.util.HashMap;
 
+import cn.sharesdk.framework.ShareSDK;
 import cn.ucai.fulicenter.model.bean.CartBean;
 import cn.ucai.fulicenter.model.bean.User;
 
@@ -11,13 +12,14 @@ import cn.ucai.fulicenter.model.bean.User;
  * Created by Administrator on 2017/1/10 0010.
  */
 
-public class FuliCenterApplication extends Application{
+public class FuliCenterApplication extends Application {
     private static FuliCenterApplication instance;
 
     public static FuliCenterApplication getInstance() {
-        return  instance;
+        return instance;
     }
-    public static HashMap<Integer,CartBean> myCartList = new HashMap<>();
+
+    public static HashMap<Integer, CartBean> myCartList = new HashMap<>();
 
     public static HashMap<Integer, CartBean> getMyCartList() {
         return myCartList;
@@ -41,5 +43,6 @@ public class FuliCenterApplication extends Application{
     public void onCreate() {
         super.onCreate();
         instance = this;
+        ShareSDK.initSDK(this);
     }
 }
