@@ -84,6 +84,7 @@ public class CartFragment extends Fragment {
     }
 
     private void initData(final int action) {
+        Log.e("UserName",mUser.getMuserName());
         if (mUser == null) {
             MFGT.gotoLogin(getActivity());
         } else {
@@ -142,6 +143,7 @@ public class CartFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        setPrice();
     }
 
     private void setPrice() {
@@ -155,6 +157,7 @@ public class CartFragment extends Fragment {
             }
         }
         mTvSum.setText("合计: ¥" + sumPrice);
+        mAdapter.notifyDataSetChanged();
     }
 
     private int getPrice(String currencyPrice) {
@@ -171,5 +174,11 @@ public class CartFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mReceiver!=null){
+            getContext().unregisterReceiver(mReceiver);
+        }
+    }
 }
